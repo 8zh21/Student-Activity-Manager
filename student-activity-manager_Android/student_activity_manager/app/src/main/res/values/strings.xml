@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">Student Activity Manager</string>
+    <string name="add_textbox_hint">Add a ToDo item</string>
+    <string name="add_button_text">Add</string>
+    <string name="mobile_services">Mobile Services </string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="checkbox_text">Item Text</string>
+    <string name="schedule_title">Schedule</string>
+    <string name="fill_user_info_title">Fill your info</string>
+    <string name="edInstTV_title">Enter the name of the institution</string>
+    <string name="EdInst_table_name">EdInst</string>
+    <string name="Faculties_table_name">Faculties</string>
+    <string name="faqultyTV_title">Enter the name of faculty</string>
+    <string name="submin_title">Submit</string>
+
+</resources>
