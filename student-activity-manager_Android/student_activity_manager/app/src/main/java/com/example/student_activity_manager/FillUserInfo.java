@@ -2,6 +2,7 @@ package com.example.student_activity_manager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+
+import java.io.Serializable;
 import java.util.List;
 
 public class FillUserInfo extends Activity {
 
+    public static final String ED_INST_ITEM_ID = "EdInstItem";
+    public static final String FACULTY_ITEM_ID = "FacultyItem";
     private final FillUserInfo mThis = this;
     private AutoCompleteTextView eiTV;
     private AutoCompleteTextView faqTV;
@@ -23,6 +29,7 @@ public class FillUserInfo extends Activity {
 
     private boolean isEdInst_New = false;
     private boolean isFaculty_New = false;
+    private MobileServiceClient mClient;
 
     private void createAndShowDialog(final String message, final String title) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -46,7 +53,7 @@ public class FillUserInfo extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_user_info);
-        ToDoActivity.mClient.withFilter(new ProgressFilter(this,
+        mClient = ToDoActivity.mClient.withFilter(new ProgressFilter(this,
                 (ProgressBar) findViewById(R.id.loadingProgressBar2)));
 
         prepareEITextView();
@@ -61,8 +68,7 @@ public class FillUserInfo extends Activity {
             protected Void doInBackground(Void... params) {
                 try
                 {
-                    final List<EdInstItem> edInstItems = ToDoActivity.mClient.getTable(getString(R.string.EdInst_table_name),
-                                                                                       EdInstItem.class).execute().get();
+                    final List<EdInstItem> edInstItems = mClient.getTable(getString(R.string.EdInst_table_name), EdInstItem.class).execute().get();
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -93,7 +99,7 @@ public class FillUserInfo extends Activity {
         eiTV.setEnabled(false);
         findViewById(R.id.submitEdInst).setEnabled(false);
 
-        if (edInstItem == null || eiTV.getText().toString() != edInstItem.getmName())
+        if (edInstItem == null || ! eiTV.getText().toString().equals(edInstItem.getmName()))
         {
             edInstItem = new EdInstItem(eiTV.getText().toString());
             isEdInst_New = true;
@@ -104,13 +110,8 @@ public class FillUserInfo extends Activity {
                 try {
                     if (isEdInst_New) {
                         //to get id from server
-                        edInstItem = ToDoActivity.mClient.getTable(getString(R.string.EdInst_table_name),
+                        edInstItem = mClient.getTable(getString(R.string.EdInst_table_name),
                                 EdInstItem.class).insert(edInstItem).get();
-                    }
-                    else
-                    {
-                        ToDoActivity.mClient.getTable(getString(R.string.EdInst_table_name),
-                                EdInstItem.class).update(edInstItem).get();
                     }
 
                 } catch (final Exception e) {
@@ -122,13 +123,11 @@ public class FillUserInfo extends Activity {
         };
         task.execute();
 
-        findViewById(R.id.submitFaculty).setVisibility(View.VISIBLE);
         prepareFacultyTextView();
     }
 
     private void prepareFacultyTextView() {
         faqTV = (AutoCompleteTextView) findViewById(R.id.FacultyTV);
-        faqTV.setVisibility(View.VISIBLE);
         faqTV.setThreshold(0);
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -136,26 +135,34 @@ public class FillUserInfo extends Activity {
             protected Void doInBackground(Void... params) {
                 try
                 {
+                    final List<FacultyItem> facultyItems;
                     if (!isEdInst_New)
                     {
-                        final List<FacultyItem> facultyItems = ToDoActivity.mClient.getTable(getString(R.string.Faculties_table_name),
+                        facultyItems = mClient.getTable(getString(R.string.Faculties_table_name),
                                 FacultyItem.class).where().field("EdInstId").eq(edInstItem.getmId()).execute().get();
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 faqTV.setAdapter(new ArrayAdapter(mThis, R.layout.dropdown_item, facultyItems));
-                                faqTV.setVisibility(View.VISIBLE);
-
-                                faqTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-                                        FacultyItem selection = (FacultyItem) parent.getItemAtPosition(position);
-                                        facultyItem = selection;
-                                    }
-                                });
                             }
                         });
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            faqTV.setVisibility(View.VISIBLE);
+                            findViewById(R.id.submitFaculty).setVisibility(View.VISIBLE);
+
+                            faqTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                                    FacultyItem selection = (FacultyItem) parent.getItemAtPosition(position);
+                                    facultyItem = selection;
+                                }
+                            });
+                        }
+                    });
 
                 } catch (Exception e) {
                     createAndShowDialogFromTask(e.getMessage(), "Error");
@@ -171,7 +178,7 @@ public class FillUserInfo extends Activity {
         faqTV.setEnabled(false);
         findViewById(R.id.submitFaculty).setEnabled(false);
 
-        if (facultyItem == null || faqTV.getText().toString() != facultyItem.getmName())
+        if (facultyItem == null || ! faqTV.getText().toString().equals(facultyItem.getmName()))
         {
             facultyItem = new FacultyItem(faqTV.getText().toString(), edInstItem.getmId());
             isFaculty_New = true;
@@ -181,14 +188,20 @@ public class FillUserInfo extends Activity {
             protected Void doInBackground(Void... params) {
                 try {
                     if (isFaculty_New) {
-                        facultyItem = ToDoActivity.mClient.getTable(getString(R.string.Faculties_table_name),
+                        facultyItem = mClient.getTable(getString(R.string.Faculties_table_name),
                                 FacultyItem.class).insert(facultyItem).get();
                     }
-                    else
-                    {
-                        ToDoActivity.mClient.getTable(getString(R.string.Faculties_table_name),
-                                FacultyItem.class).update(facultyItem).get();
-                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent answerIntent = new Intent();
+                            answerIntent.putExtra(ED_INST_ITEM_ID, edInstItem.getmId());
+                            answerIntent.putExtra(FACULTY_ITEM_ID, facultyItem.getmId());
+                            setResult(RESULT_OK, answerIntent);
+                            finish();
+                        }
+                    });
 
                 } catch (final Exception e) {
                     createAndShowDialogFromTask(e.getMessage(), "Error");
@@ -198,5 +211,10 @@ public class FillUserInfo extends Activity {
             }
         };
         task.execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // nothing to do
     }
 }

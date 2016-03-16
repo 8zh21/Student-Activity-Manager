@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -40,6 +41,7 @@ import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperati
 
 public class ToDoActivity extends Activity {
 
+    private static final int GET_USER_INFO_REQUEST_CODE = 1;
     /**
      * Mobile Service Client reference
      */
@@ -73,12 +75,8 @@ public class ToDoActivity extends Activity {
 
 
     private UserItem mUser;
-    private EdInstItem mUserEdInst;
-    private FacultyItem mUserFaculty;
 
     private final ToDoActivity mThis = this;
-    //private MobileServiceTable<EdInstItem> mEdInstTable;
-    //private MobileServiceTable<FacultyItem> mFacultyTable;
 
 
 
@@ -94,10 +92,8 @@ public class ToDoActivity extends Activity {
             }
             @Override
             public void onSuccess(MobileServiceUser user) {
-                createAndShowDialog("You are now logged in", "Success");
+                Toast.makeText(getApplicationContext(), "You are now logged in", Toast.LENGTH_SHORT).show();
                 checkUser();
-                createTable();
-
             }
         });
     }
@@ -122,22 +118,21 @@ public class ToDoActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent = new Intent(mThis, FillUserInfo.class);
-                                startActivity(intent);
+                                Intent getUserInfoIntent = new Intent(mThis, FillUserInfo.class);
+                                startActivityForResult(getUserInfoIntent, GET_USER_INFO_REQUEST_CODE);
                             }
                         });
                     }
                     else
                     {
                         mUser = u.get(0);
-                        mUserEdInst = mClient.getTable("EdInst", EdInstItem.class)
-                                .where().field("id").eq(mUser.getmEdInstId())
-                                .execute().get().get(0);
-                        mUserFaculty = mClient.getTable("Faculties", FacultyItem.class)
-                                .where().field("id").eq(mUser.getmFacultyId())
-                                .execute().get().get(0);
 
-                        createAndShowDialog(mUser.toString(), "Hello!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "User confirmed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
                 } catch (final Exception e){
@@ -531,5 +526,45 @@ public class ToDoActivity extends Activity {
     {
         Intent intent = new Intent(this, ScheduleActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected  void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GET_USER_INFO_REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            mUser.setmEdInstId(data.getStringExtra(FillUserInfo.ED_INST_ITEM_ID));
+            mUser.setmFacultyId(data.getStringExtra(FillUserInfo.FACULTY_ITEM_ID));
+
+            registerNewUser(mUser);
+        }
+    }
+
+    private void registerNewUser(UserItem u)
+    {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try
+                {
+                    mClient.getTable(getString(R.string.Users_table_name), UserItem.class)
+                           .insert(mUser);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "You are registered", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        task.execute();
     }
 }

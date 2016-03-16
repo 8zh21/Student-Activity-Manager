@@ -11,6 +11,7 @@
     <string name="edInstTV_title">Enter the name of the institution</string>
     <string name="EdInst_table_name">EdInst</string>
     <string name="Faculties_table_name">Faculties</string>
+    <string name="Users_table_name">users</string>
     <string name="faqultyTV_title">Enter the name of faculty</string>
     <string name="submin_title">Submit</string>
 
