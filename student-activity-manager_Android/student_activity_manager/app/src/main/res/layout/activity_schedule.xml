@@ -7,4 +7,29 @@
     android:orientation="vertical"
     tools:context="com.example.student_activity_manager.ScheduleActivity">
 
+    <ProgressBar
+        android:id="@+id/loadingProgressBar3"
+        android:visibility="gone"
+        android:layout_width="28dp"
+        android:layout_height="28dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/day_spinner" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sch_items_listView" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add class"
+        android:id="@+id/add_sch_item_button"
+        android:visibility="invisible"
+        android:onClick="createScheduleItem"/>
+
+
 </LinearLayout>

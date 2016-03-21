@@ -73,7 +73,7 @@ public class FillUserInfo extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            eiTV.setAdapter(new ArrayAdapter(mThis, R.layout.dropdown_item, edInstItems));
+                            eiTV.setAdapter(new ArrayAdapter(mThis, android.R.layout.simple_dropdown_item_1line, edInstItems));
                             eiTV.setEnabled(true);
 
                             eiTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,7 +91,7 @@ public class FillUserInfo extends Activity {
                 return null;
             }
         };
-        task.execute();
+        AsyncTaskRuner.runAsyncTask(task);
     }
 
     public void submitEdInst(View view)
@@ -121,7 +121,7 @@ public class FillUserInfo extends Activity {
             return null;
             }
         };
-        task.execute();
+        AsyncTaskRuner.runAsyncTask(task);
 
         prepareFacultyTextView();
     }
@@ -144,7 +144,7 @@ public class FillUserInfo extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                faqTV.setAdapter(new ArrayAdapter(mThis, R.layout.dropdown_item, facultyItems));
+                                faqTV.setAdapter(new ArrayAdapter(mThis, android.R.layout.simple_dropdown_item_1line, facultyItems));
                             }
                         });
                     }
@@ -170,7 +170,7 @@ public class FillUserInfo extends Activity {
                 return null;
             }
         };
-        task.execute();
+        AsyncTaskRuner.runAsyncTask(task);
     }
 
     public void submitFaculty(View view)
@@ -210,7 +210,7 @@ public class FillUserInfo extends Activity {
                 return null;
             }
         };
-        task.execute();
+        AsyncTaskRuner.runAsyncTask(task);
     }
 
     @Override

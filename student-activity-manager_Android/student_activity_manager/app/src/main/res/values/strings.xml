@@ -14,5 +14,17 @@
     <string name="Users_table_name">users</string>
     <string name="faqultyTV_title">Enter the name of faculty</string>
     <string name="submin_title">Submit</string>
+    <string name="scheduleItems_table_name">scheduleItems</string>
+    <string name="timeItems_table_name">timeItems</string>
+
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 
 </resources>

@@ -3,7 +3,10 @@ package com.example.student_activity_manager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +25,10 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.Query;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOperations;
 import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
+import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncTable;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDataType;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
@@ -50,13 +56,13 @@ public class ToDoActivity extends Activity {
     /**
      * Mobile Service Table used to access data
      */
-    private MobileServiceTable<ToDoItem> mToDoTable;
+    //private MobileServiceTable<ToDoItem> mToDoTable;
 
     //Offline Sync
     /**
      * Mobile Service Table used to access and Sync data
      */
-    //private MobileServiceSyncTable<ToDoItem> mToDoTable;
+    private MobileServiceSyncTable<ToDoItem> mToDoTable;
 
     /**
      * Adapter to sync the items list with the view
@@ -74,7 +80,7 @@ public class ToDoActivity extends Activity {
     private ProgressBar mProgressBar;
 
 
-    private UserItem mUser;
+    public static UserItem mUser;
 
     private final ToDoActivity mThis = this;
 
@@ -143,20 +149,20 @@ public class ToDoActivity extends Activity {
             }
         };
 
-        runAsyncTask(task);
+        AsyncTaskRuner.runAsyncTask(task);
     }
 
     private void createTable()
     {
         try {
             // Get the Mobile Service Table instance to use
-            mToDoTable = mClient.getTable(ToDoItem.class);
+            //mToDoTable = mClient.getTable(ToDoItem.class);
 
             // Offline Sync
-            //mToDoTable = mClient.getSyncTable("ToDoItem", ToDoItem.class);
+            mToDoTable = mClient.getSyncTable("ToDoItem", ToDoItem.class);
 
             //Init local storage
-            initLocalStore().get();
+            //initLocalStore().get();
 
             mTextNewToDo = (EditText) findViewById(R.id.textNewToDo);
 
@@ -344,10 +350,10 @@ public class ToDoActivity extends Activity {
             protected Void doInBackground(Void... params) {
 
                 try {
-                    final List<ToDoItem> results = refreshItemsFromMobileServiceTable();
+                    //final List<ToDoItem> results = refreshItemsFromMobileServiceTable();
 
                     //Offline Sync
-                    //final List<ToDoItem> results = refreshItemsFromMobileServiceTableSyncTable();
+                    final List<ToDoItem> results = refreshItemsFromMobileServiceTableSyncTable();
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -373,7 +379,7 @@ public class ToDoActivity extends Activity {
     /**
      * Refresh the list with the items in the Mobile Service Table
      */
-
+/*
     private List<ToDoItem> refreshItemsFromMobileServiceTable() throws ExecutionException, InterruptedException {
         return mToDoTable.where().field("complete").
                 eq(val(false)).execute().get();
@@ -383,13 +389,13 @@ public class ToDoActivity extends Activity {
     /**
      * Refresh the list with the items in the Mobile Service Sync Table
      */
-    /*private List<ToDoItem> refreshItemsFromMobileServiceTableSyncTable() throws ExecutionException, InterruptedException {
+    private List<ToDoItem> refreshItemsFromMobileServiceTableSyncTable() throws ExecutionException, InterruptedException {
         //sync the data
         sync().get();
         Query query = QueryOperations.field("complete").
                 eq(val(false));
         return mToDoTable.read(query).get();
-    }*/
+    }
 
     /**
      * Initialize local storage
@@ -439,7 +445,7 @@ public class ToDoActivity extends Activity {
      * Sync the current context and the Mobile Service Sync Table
      * @return
      */
-    /*
+
     private AsyncTask<Void, Void, Void> sync() {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
             @Override
@@ -456,7 +462,7 @@ public class ToDoActivity extends Activity {
         };
         return runAsyncTask(task);
     }
-    */
+
 
     /**
      * Creates a dialog and shows it
@@ -489,7 +495,7 @@ public class ToDoActivity extends Activity {
         if(exception.getCause() != null){
             ex = exception.getCause();
         }
-        createAndShowDialog(ex.getMessage(), title);
+        createAndShowDialog(this, ex.getMessage(), title);
     }
 
     /**
@@ -500,8 +506,8 @@ public class ToDoActivity extends Activity {
      * @param title
      *            The dialog title
      */
-    private void createAndShowDialog(final String message, final String title) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    private static void createAndShowDialog(Activity activity, final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setMessage(message);
         builder.setTitle(title);
@@ -565,6 +571,8 @@ public class ToDoActivity extends Activity {
                 return null;
             }
         };
-        task.execute();
+        AsyncTaskRuner.runAsyncTask(task);
     }
+
+
 }

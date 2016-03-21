@@ -17,6 +17,7 @@ public class ToDoItem {
     @com.google.gson.annotations.SerializedName("id")
     private String mId;
 
+
     /**
      * Indicates if the item is completed
      */
