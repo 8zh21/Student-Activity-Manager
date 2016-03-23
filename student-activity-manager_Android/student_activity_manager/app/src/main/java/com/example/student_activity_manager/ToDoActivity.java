@@ -2,20 +2,11 @@ package com.example.student_activity_manager;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,25 +16,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
-import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.table.query.Query;
-import com.microsoft.windowsazure.mobileservices.table.query.QueryOperations;
-import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
-import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncTable;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDataType;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
-import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
-
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 
 public class ToDoActivity extends Activity {
@@ -54,24 +33,42 @@ public class ToDoActivity extends Activity {
     public static UserItem mUser;
     private final ToDoActivity mThis = this;
 
+    public static final String SHAREDPREFFILE = "temp";
+    public static final String USERIDPREF = "uid";
+    public static final String TOKENPREF = "tkn";
+    public static final String USEREDINST = "edinst";
+    public static final String USERFACULTY = "faculty";
+
     private void authenticate() {
+        // We first try to load a token cache if one exists.
+        if (loadUserTokenCache(mClient))
+        {
+            Toast.makeText(getApplicationContext(), "You are now logged in offline", Toast.LENGTH_SHORT).show();
+            checkUser();
+        }
+        // If we failed to load a token cache, login and create a token cache
+        else
+        {
+            // Login using the Google provider.
+            ListenableFuture<MobileServiceUser> mLogin = mClient.login(MobileServiceAuthenticationProvider.Google);
 
-        // Login using the Google provider.
-        ListenableFuture<MobileServiceUser> mLogin = mClient.login(MobileServiceAuthenticationProvider.Google);
-        Futures.addCallback(mLogin, new FutureCallback<MobileServiceUser>() {
-            @Override
-            public void onFailure(Throwable exc) {
-                Dialog.createAndShowDialog(mThis, ((Exception) exc).getMessage(), "Error");
-            }
-            @Override
-            public void onSuccess(MobileServiceUser user) {
-                Toast.makeText(getApplicationContext(), "You are now logged in", Toast.LENGTH_SHORT).show();
-                checkUser();
-            }
-        });
+            Futures.addCallback(mLogin, new FutureCallback<MobileServiceUser>() {
+                @Override
+                public void onFailure(Throwable exc) {
+                    Dialog.createAndShowDialog(mThis, "You must log in. Login Required", "Error");
+                    ((Button) findViewById(R.id.Log_In)).setEnabled(true);
+                    ((Button) findViewById(R.id.Log_In)).setVisibility(View.VISIBLE);
+                }
+                @Override
+                public void onSuccess(MobileServiceUser user) {
+                    Toast.makeText(getApplicationContext(), "You are now logged in", Toast.LENGTH_SHORT).show();
+                    cacheUserToken(mClient.getCurrentUser());
+                    ((Button) findViewById(R.id.Log_In)).setVisibility(View.GONE);
+                    checkUser();
+                }
+            });
+        }
     }
-
-
 
     private void checkUser()
     {
@@ -80,26 +77,32 @@ public class ToDoActivity extends Activity {
             protected Void doInBackground(Void... params) {
 
                 try {
-                    final List<UserItem> u = mClient.getTable("users", UserItem.class).execute().get();
-
-                    //Offline Sync TO DO
-
-                    if (u.isEmpty())
+                    if (!loadUserInfo())
                     {
-                        mUser = new UserItem();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent getUserInfoIntent = new Intent(mThis, FillUserInfo.class);
-                                startActivityForResult(getUserInfoIntent, GET_USER_INFO_REQUEST_CODE);
-                            }
-                        });
+                        final List<UserItem> u = mClient.getTable("users", UserItem.class).execute().get();
+                        if(u.isEmpty()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent getUserInfoIntent = new Intent(mThis, FillUserInfo.class);
+                                    startActivityForResult(getUserInfoIntent, GET_USER_INFO_REQUEST_CODE);
+                                }
+                            });
+                        } else
+                        {
+                            mUser = u.get(0);
+                            cacheUserInfo();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "User confirmed", Toast.LENGTH_SHORT).show();
+                                    ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
+                                }
+                            });
+                        }
                     }
                     else
                     {
-                        mUser = u.get(0);
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -123,6 +126,7 @@ public class ToDoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
 
+        mUser = new UserItem();
         mProgressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
 
         // Initialize the progress bar
@@ -179,6 +183,8 @@ public class ToDoActivity extends Activity {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "You are registered", Toast.LENGTH_SHORT).show();
+
+                            cacheUserInfo();
                             ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
                         }
                     });
@@ -192,5 +198,64 @@ public class ToDoActivity extends Activity {
         AsyncTaskRuner.runAsyncTask(task);
     }
 
+    private void cacheUserToken(MobileServiceUser user)
+    {
+        SharedPreferences prefs = getSharedPreferences(SHAREDPREFFILE, Context.MODE_PRIVATE);
+        Editor editor = prefs.edit();
+        editor.putString(USERIDPREF, user.getUserId());
+        editor.putString(TOKENPREF, user.getAuthenticationToken());
+        mUser.setmId(user.getUserId());
+        editor.commit();
+    }
 
+    private boolean loadUserTokenCache(MobileServiceClient client)
+    {
+        SharedPreferences prefs = getSharedPreferences(SHAREDPREFFILE, Context.MODE_PRIVATE);
+        String userId = prefs.getString(USERIDPREF, "undefined");
+        if (userId == "undefined")
+            return false;
+        String token = prefs.getString(TOKENPREF, "undefined");
+        if (token == "undefined")
+            return false;
+
+        MobileServiceUser user = new MobileServiceUser(userId);
+        user.setAuthenticationToken(token);
+        mUser.setmId(userId);
+        client.setCurrentUser(user);
+
+        return true;
+    }
+
+    private boolean loadUserInfo()
+    {
+        SharedPreferences prefs = getSharedPreferences(SHAREDPREFFILE, Context.MODE_PRIVATE);
+
+        mUser.setmId(prefs.getString(USERIDPREF, "undefined"));
+        if (mUser.getmId() == "undefined")
+            return false;
+
+        mUser.setmEdInstId(prefs.getString(USEREDINST, "undefined"));
+        if (mUser.getmEdInstId() == "undefined")
+            return false;
+
+        mUser.setmFacultyId(prefs.getString(USERFACULTY, "undefined"));
+        if (mUser.getmFacultyId() == "undefined")
+            return false;
+
+        return true;
+    }
+
+    private void cacheUserInfo()
+    {
+        SharedPreferences prefs = getSharedPreferences(SHAREDPREFFILE, Context.MODE_PRIVATE);
+        Editor editor = prefs.edit();
+        editor.putString(USEREDINST, mUser.getmEdInstId());
+        editor.putString(USERFACULTY, mUser.getmFacultyId());
+        editor.commit();
+    }
+
+    public void logIn(View view) {
+        authenticate();
+        ((Button) findViewById(R.id.Log_In)).setEnabled(false);
+    }
 }

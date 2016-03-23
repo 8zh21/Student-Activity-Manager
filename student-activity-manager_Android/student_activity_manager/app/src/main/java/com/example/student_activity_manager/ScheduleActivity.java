@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
@@ -21,7 +20,6 @@ import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileSer
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
 import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +160,8 @@ public class ScheduleActivity extends Activity {
                     timeItemsTable.pull(null).get();
 
                 } catch (final Exception e) {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    //Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, "The connection to the server fails.\nWorking offline.", "No internet");
                 }
                 return null;
             }

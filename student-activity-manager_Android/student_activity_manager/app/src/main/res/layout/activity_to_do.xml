@@ -14,6 +14,15 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Log In"
+        android:id="@+id/Log_In"
+        android:onClick="logIn">
+    </Button>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Schedule"
         android:id="@+id/GoToSchedule"
         android:onClick="goToSchedule">

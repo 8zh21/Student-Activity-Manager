@@ -21,6 +21,10 @@ public class UserItem
         return mId;
     }
 
+    public void setmId(String mId) {
+        this.mId = mId;
+    }
+
     public String getmEdInstId() {
         return mEdInstId;
     }
