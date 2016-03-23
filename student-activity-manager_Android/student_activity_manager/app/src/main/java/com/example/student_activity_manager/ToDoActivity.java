@@ -48,25 +48,8 @@ import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperati
 public class ToDoActivity extends Activity {
 
     private static final int GET_USER_INFO_REQUEST_CODE = 1;
-    /**
-     * Mobile Service Client reference
-     */
-    public static MobileServiceClient mClient; //was private
-
-    /**
-     * Mobile Service Table used to access data
-     */
-    //private MobileServiceTable<ToDoItem> mToDoTable;
-
-    //Offline Sync
-    /**
-     * Mobile Service Table used to access and Sync data
-     */
+    public static MobileServiceClient mClient;
     private MobileServiceSyncTable<ToDoItem> mToDoTable;
-
-    /**
-     * Adapter to sync the items list with the view
-     */
     private ToDoItemAdapter mAdapter;
 
     /**

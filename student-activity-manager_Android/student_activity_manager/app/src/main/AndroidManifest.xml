@@ -36,6 +36,7 @@
             android:name=".FillUserInfo"
             android:label="@string/fill_user_info_title" />
         <activity android:name=".newSchItemActivity" />
+        <activity android:name=".editSchItemActivity" />
         <activity android:name=".newTimeItemActivity"></activity>
     </application>
 

@@ -91,7 +91,30 @@ public class TimeItem {
 
     @Override
     public String toString() {
-        return name + " " + String.valueOf(sh) + ":" + String.valueOf(sm) + " - " +
-               String.valueOf(fh) + ":" + String.valueOf(fm);
+        return name + " " + getStartTime() + " - " + getFinishTime();
+    }
+
+    public String getStartTime()
+    {
+        String hCorrection = "";
+        String mCorrection = "";
+        if (sh < 10)
+            hCorrection = "0";
+        if(sm < 10)
+            mCorrection = "0";
+
+        return hCorrection + String.valueOf(sh) + ":" + mCorrection + String.valueOf(sm);
+    }
+
+    public String getFinishTime()
+    {
+        String hCorrection = "";
+        String mCorrection = "";
+        if (fh < 10)
+            hCorrection = "0";
+        if(fm < 10)
+            mCorrection = "0";
+
+        return hCorrection + String.valueOf(fh) + ":" + mCorrection + String.valueOf(fm);
     }
 }

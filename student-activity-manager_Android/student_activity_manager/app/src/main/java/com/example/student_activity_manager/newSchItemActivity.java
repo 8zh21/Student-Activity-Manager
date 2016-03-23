@@ -1,17 +1,23 @@
 package com.example.student_activity_manager;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class newSchItemActivity extends Activity {
 
     public static TimeItemAdapter timeItemAdapter;
-    private Activity mThis = this;
+    protected Activity mThis = this;
+    protected EditText editTitle;
+    protected EditText editClassroom;
+    protected Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +26,13 @@ public class newSchItemActivity extends Activity {
 
         //----------
 
-        Spinner spinner = (Spinner) findViewById(R.id.timeModelSpinner);
-        timeItemAdapter = new TimeItemAdapter(this, R.layout.timeitem_row);
+        spinner = (Spinner) findViewById(R.id.timeModelSpinner);
+        timeItemAdapter = new TimeItemAdapter(this, R.layout.timeitem_row, ScheduleActivity.timeItems);
         spinner.setAdapter(timeItemAdapter);
+        timeItemAdapter.notifyDataSetChanged();
 
-        for (TimeItem item : ScheduleActivity.timeItems)
-        {
-            timeItemAdapter.add(item);
-        }
+        editTitle = (EditText) findViewById(R.id.editTitle);
+        editClassroom = (EditText) findViewById(R.id.editClassroom);
     }
 
     public void createTimeItem(View view) {
@@ -36,6 +41,25 @@ public class newSchItemActivity extends Activity {
     }
 
     public void tryToDelTimeItem(final TimeItem item) {
+
+        Dialog.createAndShowYNDialog(this, "Are you sure you want to delete the item \"" + item.getName() + "\"",
+                "Deleting",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        realDelTimeItem(item);
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //nothing to do
+                    }
+                });
+    }
+
+    private  void realDelTimeItem(final TimeItem item)
+    {
         if (!isTimeItemFree(item))
         {
             Dialog.createAndShowDialog(this, "This item still used", "Denied");
@@ -51,7 +75,7 @@ public class newSchItemActivity extends Activity {
                             @Override
                             public void run() {
                                 timeItemAdapter.remove(item);
-                                mThis.finish();
+                                //ScheduleActivity.timeItems.remove(item);
                             }
                         });
                     } catch (Exception e)
@@ -73,5 +97,53 @@ public class newSchItemActivity extends Activity {
                 return  false;
         }
         return  true;
+    }
+
+    public void saveNewSchItem(View view) {
+
+        String title = editTitle.getText().toString();
+        String classroom = editClassroom.getText().toString();
+
+        if (title.isEmpty())
+        {
+            Toast.makeText(this, "Enter the title", Toast.LENGTH_SHORT).show();
+        }
+        else if (classroom.isEmpty())
+        {
+            Toast.makeText(this, "Enter the classroom", Toast.LENGTH_SHORT).show();
+        }
+        else if (spinner.getSelectedItem() == null)
+        {
+            Toast.makeText(this, "Choose the time item", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            final ScheduleItem newSI = new ScheduleItem(title, classroom,
+                    ((TimeItem) spinner.getSelectedItem()).getId(),
+                    ScheduleActivity.daySpinner.getSelectedItemPosition());
+
+            newSI.setUserId(ToDoActivity.mUser.getmId());
+
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        final ScheduleItem entity = ScheduleActivity.scheduleItemsTable.insert(newSI).get();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ScheduleActivity.scheduleItemAdapter.add(entity);
+                                mThis.finish();
+                            }
+                        });
+                    } catch (Exception e)
+                    {
+                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    }
+                    return null;
+                }
+            };
+            AsyncTaskRuner.runAsyncTask(task);
+        }
     }
 }

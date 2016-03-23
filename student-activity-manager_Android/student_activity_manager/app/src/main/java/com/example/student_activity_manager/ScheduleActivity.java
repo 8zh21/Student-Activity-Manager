@@ -1,6 +1,7 @@
 package com.example.student_activity_manager;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileSer
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
 import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,10 @@ public class ScheduleActivity extends Activity {
     private Activity mThis = this;
     public static List<ScheduleItem> scheduleItems;
     public static List<TimeItem> timeItems;
+    public static Spinner daySpinner;
+    public  static ScheduleItemAdapter scheduleItemAdapter;
     private AsyncTask<Void, Void, Void> refreshing;
+    public static ScheduleItem schItemOnEdition;
 
 
     @Override
@@ -62,23 +67,12 @@ public class ScheduleActivity extends Activity {
 
     private void prepareDaySelector()
     {
-        Spinner spinner = (Spinner) findViewById(R.id.day_spinner);
+        daySpinner = (Spinner) findViewById(R.id.day_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                                                                 getResources().getStringArray(R.array.days));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //nothing
-            }
-        });
-        spinner.setSelection(0);
+        daySpinner.setAdapter(adapter);
+        daySpinner.setSelection(0);
     }
 
     private void prepareListView()
@@ -94,10 +88,58 @@ public class ScheduleActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ListView listView = (ListView) findViewById(R.id.sch_items_listView);
-                        ArrayAdapter<ScheduleItem> adapter = new ArrayAdapter<ScheduleItem>(mThis, android.R.layout.simple_list_item_1,
-                                scheduleItems);
-                        listView.setAdapter(adapter);
+                        ListView scheduleItemView = (ListView) findViewById(R.id.sch_items_listView);
+                        scheduleItemAdapter = new ScheduleItemAdapter(mThis, R.layout.scheduleitem_row, scheduleItems);
+                        scheduleItemView.setAdapter(scheduleItemAdapter);
+                        scheduleItemAdapter.filter(daySpinner.getSelectedItemPosition());
+
+                        daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                scheduleItemAdapter.filter(daySpinner.getSelectedItemPosition());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                //nothing to do
+                            }
+                        });
+
+                        scheduleItemView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                ScheduleItem item = scheduleItemAdapter.getItem(position);
+                                TimeItem timeItem = getTimeItemFromId(item.getTimeItemId());
+                                String time = timeItem.getStartTime() + "-" + timeItem.getFinishTime();
+                                String message = item.getTitle() +
+                                        "\n\n" + "At classroom: " + item.getClassroom();
+
+                                Dialog.createAndShowDialog(mThis, message, time);
+                            }
+                        });
+
+                        scheduleItemView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                            @Override
+                            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                String[] menuItems = {"Edit", "Delete"};
+                                final ScheduleItem scheduleItem =  scheduleItemAdapter.getItem(position);
+                                Dialog.createAndShowSchItemMenuDialog(mThis,
+                                        scheduleItem.getTitle(),
+                                        menuItems,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (which == 0)
+                                                    editScheduleItem(scheduleItem);
+                                                else if (which == 1)
+                                                    tryToDelScheduleItem(scheduleItem);
+                                            }
+                                        });
+
+                                return true;
+                            }
+                        });
 
                         findViewById(R.id.add_sch_item_button).setVisibility(View.VISIBLE);
                     }
@@ -213,4 +255,63 @@ public class ScheduleActivity extends Activity {
         startActivity(intent);
     }
 
+    public static TimeItem getTimeItemFromId(String timeId)
+    {
+        for (TimeItem tItem : timeItems)
+        {
+            if (timeId.equals(tItem.getId()))
+            {
+                return tItem;
+            }
+        }
+        return  null;
+    }
+
+    private void editScheduleItem(ScheduleItem item)
+    {
+        schItemOnEdition = item;
+        Intent intent = new Intent(this, editSchItemActivity.class);
+        startActivity(intent);
+    }
+
+    private void tryToDelScheduleItem(final ScheduleItem item)
+    {
+        Dialog.createAndShowYNDialog(this, "Are you sure you want to delete the item \"" + item.getTitle() + "\"",
+                "Deleting",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        realDelScheduleItem(item);
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //nothing to do
+                    }
+                });
+    }
+
+    private void realDelScheduleItem(final ScheduleItem item)
+    {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ScheduleActivity.scheduleItemsTable.delete(item).get();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            scheduleItemAdapter.remove(item);
+                        }
+                    });
+                } catch (Exception e)
+                {
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                }
+                return null;
+            }
+        };
+        AsyncTaskRuner.runAsyncTask(task);
+    }
 }

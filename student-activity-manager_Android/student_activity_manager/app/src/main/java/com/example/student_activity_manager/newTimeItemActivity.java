@@ -58,7 +58,6 @@ public class newTimeItemActivity extends Activity {
                             @Override
                             public void run() {
                                 newSchItemActivity.timeItemAdapter.add(entity);
-                                ScheduleActivity.timeItems.add(entity);
                                 mThis.finish();
                             }
                         });
