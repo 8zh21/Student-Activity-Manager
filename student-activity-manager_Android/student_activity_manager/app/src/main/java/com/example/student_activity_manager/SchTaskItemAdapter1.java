@@ -21,7 +21,7 @@ import java.util.List;
 public class SchTaskItemAdapter1 extends ArrayAdapter<ScheduleTaskItem> {
 
     protected Context mContext;
-    private List<ScheduleTaskItem> items;
+    protected List<ScheduleTaskItem> items;
     private ArrayList<ScheduleTaskItem> originalItems;
     protected int mLayoutResourceId;
 
@@ -60,6 +60,12 @@ public class SchTaskItemAdapter1 extends ArrayAdapter<ScheduleTaskItem> {
 
     @Override
     public void notifyDataSetChanged() {
+        sort();
+        super.notifyDataSetChanged();
+    }
+
+    protected void sort()
+    {
         Collections.sort(items, new Comparator<ScheduleTaskItem>() {
             @Override
             public int compare(ScheduleTaskItem l, ScheduleTaskItem r) {
@@ -71,8 +77,6 @@ public class SchTaskItemAdapter1 extends ArrayAdapter<ScheduleTaskItem> {
                     return 0;
             }
         });
-
-        super.notifyDataSetChanged();
     }
 
     public void filter()

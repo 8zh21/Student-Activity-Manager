@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,5 +63,40 @@ public class SchTaskItemAdapter2 extends SchTaskItemAdapter1 {
     private String getDayFromNumber(int n)
     {
         return ((Activity)mContext).getResources().getStringArray(R.array.days)[n];
+    }
+
+    @Override
+    protected void sort() {
+
+        Collections.sort(items, new Comparator<ScheduleTaskItem>() {
+            @Override
+            public int compare(ScheduleTaskItem l, ScheduleTaskItem r) {
+                if (!l.getIsCompleted() && r.getIsCompleted())
+                    return -1;
+                else if (l.getIsCompleted() && !r.getIsCompleted())
+                    return 1;
+                else {
+                    int lDay = ((ScheduleTasksActivity) mContext).getScheduleItemById(l.getSchItemId()).getDay();
+                    int rDay = ((ScheduleTasksActivity) mContext).getScheduleItemById(r.getSchItemId()).getDay();
+                    int currentDay = (new Date()).getDay() - 1;
+                    if (lDay == rDay)
+                        return 0;
+                    else if (lDay < rDay)
+                    {
+                        if (lDay < currentDay && rDay > currentDay)
+                            return 1;
+                        else
+                            return -1;
+                    }
+                    else //(lDay > rDay)
+                    {
+                        if (rDay < currentDay && lDay > currentDay)
+                            return -1;
+                        else
+                            return 1;
+                    }
+                }
+            }
+        });
     }
 }

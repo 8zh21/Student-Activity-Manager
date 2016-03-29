@@ -1,8 +1,10 @@
 package com.example.student_activity_manager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -173,10 +175,14 @@ public class ScheduleActivity extends Activity {
                     if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
                         finish();
                         ToDoActivity.mThis.authenticate(true);
-                    }
-                    else
+                    } else if (!isCancelled()) {
                         Dialog.createAndShowDialogFromTask(mThis, "Не получилось соединиться с сервером.\nРаботаем оффлайн.", "Нет соединения");
-                } catch (final Exception e)
+                                            }
+                    else
+                    {
+                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
+                    }
+                } catch (Exception e)
                 {
                     Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
@@ -371,5 +377,11 @@ public class ScheduleActivity extends Activity {
             }
         };
         AsyncTaskRuner.runAsyncTask(task);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 }
