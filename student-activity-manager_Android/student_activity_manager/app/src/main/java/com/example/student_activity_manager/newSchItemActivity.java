@@ -42,8 +42,8 @@ public class newSchItemActivity extends Activity {
 
     public void tryToDelTimeItem(final TimeItem item) {
 
-        Dialog.createAndShowYNDialog(this, "Are you sure you want to delete the item \"" + item.getName() + "\"",
-                "Deleting",
+        Dialog.createAndShowYNDialog(this, "Вы уверенны, что хотите удалить времеменную модель \"" + item.getName() + "\"?",
+                "Удаление",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -62,7 +62,7 @@ public class newSchItemActivity extends Activity {
     {
         if (!isTimeItemFree(item))
         {
-            Dialog.createAndShowDialog(this, "This item still used", "Denied");
+            Dialog.createAndShowDialog(this, "Эта модель используется", "Запрещенно");
         }
         else
         {
@@ -106,15 +106,15 @@ public class newSchItemActivity extends Activity {
 
         if (title.isEmpty())
         {
-            Toast.makeText(this, "Enter the title", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Введите заголовок", Toast.LENGTH_SHORT).show();
         }
         else if (classroom.isEmpty())
         {
-            Toast.makeText(this, "Enter the classroom", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Введите аудиторию", Toast.LENGTH_SHORT).show();
         }
         else if (spinner.getSelectedItem() == null)
         {
-            Toast.makeText(this, "Choose the time item", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Выберете временную модель", Toast.LENGTH_SHORT).show();
         }
         else
         {

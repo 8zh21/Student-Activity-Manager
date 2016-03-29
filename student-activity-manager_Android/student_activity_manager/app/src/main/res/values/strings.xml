@@ -16,15 +16,16 @@
     <string name="submin_title">Submit</string>
     <string name="scheduleItems_table_name">scheduleItems</string>
     <string name="timeItems_table_name">timeItems</string>
+    <string name="scheduleTaskItems_table_name">scheduletasks</string>
 
     <string-array name="days">
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
     </string-array>
 
 </resources>

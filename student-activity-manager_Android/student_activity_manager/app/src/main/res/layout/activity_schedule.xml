@@ -13,26 +13,36 @@
         android:visibility="gone"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:paddingBottom="3dip" />
+        android:padding="5dip" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/day_spinner"
-        android:paddingTop="3dip"
-        android:paddingBottom="3dip" />
+        android:padding="5dip" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sch_items_listView" />
+        android:id="@+id/sch_items_listView"
+        android:padding="5dip" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add class"
+        android:text="Добавить занятие"
         android:id="@+id/add_sch_item_button"
         android:visibility="invisible"
-        android:onClick="createScheduleItem"/>
+        android:onClick="createScheduleItem"
+        android:padding="5dip" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Показать все задания"
+        android:id="@+id/show_tasks_button"
+        android:visibility="invisible"
+        android:onClick="showTasks"
+        android:padding="5dip" />
 
 </LinearLayout>

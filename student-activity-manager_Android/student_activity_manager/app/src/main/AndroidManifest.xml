@@ -37,7 +37,9 @@
             android:label="@string/fill_user_info_title" />
         <activity android:name=".newSchItemActivity" />
         <activity android:name=".editSchItemActivity" />
-        <activity android:name=".newTimeItemActivity"></activity>
+        <activity android:name=".newTimeItemActivity" />
+        <activity android:name=".newSchTaskActivity" />
+        <activity android:name=".ScheduleTasksActivity"></activity>
     </application>
 
 </manifest>

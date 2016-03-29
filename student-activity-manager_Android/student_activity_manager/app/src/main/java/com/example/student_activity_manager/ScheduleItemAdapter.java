@@ -24,10 +24,8 @@ public class ScheduleItemAdapter extends ArrayAdapter<ScheduleItem> {
 
     private Context mContext;
     private int mLayoutResourceId;
-    private Spinner daySelector;
     private ArrayList<ScheduleItem> originalItems;
     private List<ScheduleItem> items;
-    private Filter filter;
 
     public ScheduleItemAdapter(Context context, int layoutResourceId, List<ScheduleItem> objs) {
         super(context, layoutResourceId, objs);
@@ -105,5 +103,22 @@ public class ScheduleItemAdapter extends ArrayAdapter<ScheduleItem> {
 
 
         super.notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(ScheduleItem object) {
+        super.add(object);
+        originalItems.add(object);
+    }
+
+    @Override
+    public void remove(ScheduleItem object) {
+        super.remove(object);
+        originalItems.remove(object);
+    }
+
+    public List<ScheduleItem> getAllScheduleItems()
+    {
+        return originalItems;
     }
 }

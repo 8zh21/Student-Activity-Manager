@@ -29,10 +29,12 @@ public class ScheduleActivity extends Activity {
 
     public static MobileServiceSyncTable<ScheduleItem> scheduleItemsTable;
     public static MobileServiceSyncTable<TimeItem> timeItemsTable;
+    public static MobileServiceSyncTable<ScheduleTaskItem> scheduleTaskTable;
     private MobileServiceClient mClient;
     private Activity mThis = this;
     public static List<ScheduleItem> scheduleItems;
     public static List<TimeItem> timeItems;
+    public static List<ScheduleTaskItem> scheduleTaskItems;
     public static Spinner daySpinner;
     public  static ScheduleItemAdapter scheduleItemAdapter;
     private AsyncTask<Void, Void, Void> refreshing;
@@ -52,6 +54,10 @@ public class ScheduleActivity extends Activity {
                                                       ScheduleItem.class);
             timeItemsTable = mClient.getSyncTable(getString(R.string.timeItems_table_name),
                                                   TimeItem.class);
+
+            scheduleTaskTable = mClient.getSyncTable(getString(R.string.scheduleTaskItems_table_name),
+                                                     ScheduleTaskItem.class);
+
             initLocalStore().get();
             refreshing = refreshSchedule();
 
@@ -118,10 +124,10 @@ public class ScheduleActivity extends Activity {
 
                         scheduleItemView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                             @Override
-                            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                                String[] menuItems = {"Edit", "Delete"};
-                                final ScheduleItem scheduleItem =  scheduleItemAdapter.getItem(position);
+                                String[] menuItems = {"Задачи", "Редактировать", "Удалить"};
+                                final ScheduleItem scheduleItem = scheduleItemAdapter.getItem(position);
                                 Dialog.createAndShowSchItemMenuDialog(mThis,
                                         scheduleItem.getTitle(),
                                         menuItems,
@@ -129,8 +135,10 @@ public class ScheduleActivity extends Activity {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (which == 0)
-                                                    editScheduleItem(scheduleItem);
+                                                    showScheduleTasks(position);
                                                 else if (which == 1)
+                                                    editScheduleItem(scheduleItem);
+                                                else if (which == 2)
                                                     tryToDelScheduleItem(scheduleItem);
                                             }
                                         });
@@ -140,6 +148,7 @@ public class ScheduleActivity extends Activity {
                         });
 
                         findViewById(R.id.add_sch_item_button).setVisibility(View.VISIBLE);
+                        findViewById(R.id.show_tasks_button).setVisibility(View.VISIBLE);
                     }
                 });
                 return  null;
@@ -158,10 +167,18 @@ public class ScheduleActivity extends Activity {
                     syncContext.push().get();
                     scheduleItemsTable.pull(null).get();
                     timeItemsTable.pull(null).get();
+                    scheduleTaskTable.pull(null).get();
 
-                } catch (final Exception e) {
-                    //Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
-                    Dialog.createAndShowDialogFromTask(mThis, "The connection to the server fails.\nWorking offline.", "No internet");
+                } catch (final ExecutionException e) {
+                    if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
+                        finish();
+                        ToDoActivity.mThis.authenticate(true);
+                    }
+                    else
+                        Dialog.createAndShowDialogFromTask(mThis, "Не получилось соединиться с сервером.\nРаботаем оффлайн.", "Нет соединения");
+                } catch (final Exception e)
+                {
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -191,6 +208,7 @@ public class ScheduleActivity extends Activity {
         sync().get();
         scheduleItems = scheduleItemsTable.read(null).get();
         timeItems = timeItemsTable.read(null).get();
+        scheduleTaskItems = scheduleTaskTable.read(null).get();
     }
 
     private AsyncTask<Void, Void, Void> initLocalStore() throws MobileServiceLocalStoreException, ExecutionException, InterruptedException {
@@ -231,6 +249,17 @@ public class ScheduleActivity extends Activity {
                     tableDefinition.put("fm", ColumnDataType.Integer);
 
                     localStore.defineTable(getString(R.string.timeItems_table_name), tableDefinition);
+
+                    //---------
+
+                    tableDefinition = new HashMap<String, ColumnDataType>();
+                    tableDefinition.put("id", ColumnDataType.String);
+                    tableDefinition.put("userId", ColumnDataType.String);
+                    tableDefinition.put("schItemId", ColumnDataType.String);
+                    tableDefinition.put("text", ColumnDataType.String);
+                    tableDefinition.put("isCompleted", ColumnDataType.Boolean);
+
+                    localStore.defineTable(getString(R.string.scheduleTaskItems_table_name), tableDefinition);
 
                     //---------
 
@@ -275,8 +304,8 @@ public class ScheduleActivity extends Activity {
 
     private void tryToDelScheduleItem(final ScheduleItem item)
     {
-        Dialog.createAndShowYNDialog(this, "Are you sure you want to delete the item \"" + item.getTitle() + "\"",
-                "Deleting",
+        Dialog.createAndShowYNDialog(this, "Вы уверенны, что хотите удалить элемент \"" + item.getTitle() + "\"",
+                "Удаление",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -308,6 +337,36 @@ public class ScheduleActivity extends Activity {
                 {
                     Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
                 }
+                return null;
+            }
+        };
+        AsyncTaskRuner.runAsyncTask(task);
+    }
+
+    private void showScheduleTasks(int schedulePosition)
+    {
+        Intent intent = new Intent(this, ScheduleTasksActivity.class);
+        intent.putExtra("position", schedulePosition);
+        startActivity(intent);
+    }
+
+    public void showTasks(View view) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    refreshing.get();
+                } catch (Exception e) {
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(mThis, ScheduleTasksActivity.class);
+                        intent.putExtra("position", -1);
+                        startActivity(intent);
+                    }
+                });
                 return null;
             }
         };

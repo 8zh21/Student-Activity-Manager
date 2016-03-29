@@ -16,6 +16,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
+import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ToDoActivity extends Activity {
     public static MobileServiceClient mClient;
     private ProgressBar mProgressBar;
     public static UserItem mUser;
-    private final ToDoActivity mThis = this;
+    public static ToDoActivity mThis;
 
     public static final String SHAREDPREFFILE = "temp";
     public static final String USERIDPREF = "uid";
@@ -39,9 +40,10 @@ public class ToDoActivity extends Activity {
     public static final String USEREDINST = "edinst";
     public static final String USERFACULTY = "faculty";
 
-    private void authenticate() {
+    public void authenticate(boolean isForcibly) {
+
         // We first try to load a token cache if one exists.
-        if (loadUserTokenCache(mClient))
+        if (!isForcibly && loadUserTokenCache(mClient))
         {
             Toast.makeText(getApplicationContext(), "You are now logged in offline", Toast.LENGTH_SHORT).show();
             checkUser();
@@ -63,9 +65,11 @@ public class ToDoActivity extends Activity {
                 public void onSuccess(MobileServiceUser user) {
                     Toast.makeText(getApplicationContext(), "You are now logged in", Toast.LENGTH_SHORT).show();
                     cacheUserToken(mClient.getCurrentUser());
+
                     ((Button) findViewById(R.id.Log_In)).setVisibility(View.GONE);
                     checkUser();
                 }
+
             });
         }
     }
@@ -124,6 +128,8 @@ public class ToDoActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mThis = this;
+
         setContentView(R.layout.activity_to_do);
 
         mUser = new UserItem();
@@ -140,7 +146,7 @@ public class ToDoActivity extends Activity {
                     "https://student-activity-manager.azurewebsites.net",
                     this).withFilter(new ProgressFilter(this, mProgressBar));
 
-            authenticate();
+            authenticate(false);
 
         } catch (MalformedURLException e) {
             Dialog.createAndShowDialog(this, "There was an error creating the Mobile Service. Verify the URL", "Error");
@@ -255,7 +261,6 @@ public class ToDoActivity extends Activity {
     }
 
     public void logIn(View view) {
-        authenticate();
-        ((Button) findViewById(R.id.Log_In)).setEnabled(false);
+        authenticate(true);
     }
 }
