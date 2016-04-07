@@ -8,9 +8,6 @@ public class UserItem
     @com.google.gson.annotations.SerializedName("id")
     private String mId;
 
-    @com.google.gson.annotations.SerializedName("EdInstId")
-    private  String mEdInstId;
-
     @com.google.gson.annotations.SerializedName("FacultyId")
     private String mFacultyId;
     
@@ -25,10 +22,6 @@ public class UserItem
         this.mId = mId;
     }
 
-    public String getmEdInstId() {
-        return mEdInstId;
-    }
-
     public String getmFacultyId() {
         return mFacultyId;
     }
@@ -37,16 +30,4 @@ public class UserItem
         this.mFacultyId = mFacultyId;
     }
 
-    public void setmEdInstId(String mEdInstId) {
-        this.mEdInstId = mEdInstId;
-    }
-
-    @Override
-    public String toString() {
-        return "<User: " +
-                "mId='" + mId + '\'' +
-                ", mEdInstId='" + mEdInstId + '\'' +
-                ", mFacultyId='" + mFacultyId + '\'' +
-                '>';
-    }
 }

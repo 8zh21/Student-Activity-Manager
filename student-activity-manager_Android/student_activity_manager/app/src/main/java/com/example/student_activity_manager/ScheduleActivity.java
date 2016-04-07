@@ -328,6 +328,7 @@ public class ScheduleActivity extends Activity {
 
     private void realDelScheduleItem(final ScheduleItem item)
     {
+        deleteAssocTasks(item);
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -339,6 +340,33 @@ public class ScheduleActivity extends Activity {
                             scheduleItemAdapter.remove(item);
                         }
                     });
+                } catch (Exception e)
+                {
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                }
+                return null;
+            }
+        };
+        AsyncTaskRuner.runAsyncTask(task);
+    }
+
+    private void deleteAssocTasks(final ScheduleItem item)
+    {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    int n = scheduleTaskItems.size();
+                    for (int i = 0; i < n; i++)
+                    {
+                        ScheduleTaskItem schItem = scheduleTaskItems.get(i);
+                        if (schItem.getSchItemId().equals(item.getId())) {
+                            scheduleTaskTable.delete(schItem).get();
+                            scheduleTaskItems.remove(schItem);
+                            i--;
+                            n--;
+                        }
+                    }
                 } catch (Exception e)
                 {
                     Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");

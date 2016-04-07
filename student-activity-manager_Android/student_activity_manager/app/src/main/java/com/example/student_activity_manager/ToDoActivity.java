@@ -37,7 +37,6 @@ public class ToDoActivity extends Activity {
     public static final String SHAREDPREFFILE = "temp";
     public static final String USERIDPREF = "uid";
     public static final String TOKENPREF = "tkn";
-    public static final String USEREDINST = "edinst";
     public static final String USERFACULTY = "faculty";
 
     public void authenticate(boolean isForcibly) {
@@ -57,13 +56,13 @@ public class ToDoActivity extends Activity {
             Futures.addCallback(mLogin, new FutureCallback<MobileServiceUser>() {
                 @Override
                 public void onFailure(Throwable exc) {
-                    Dialog.createAndShowDialog(mThis, "You must log in. Login Required", "Error");
+                    Dialog.createAndShowDialog(mThis, "Авторизация обязательна", "Ошибка");
                     ((Button) findViewById(R.id.Log_In)).setEnabled(true);
                     ((Button) findViewById(R.id.Log_In)).setVisibility(View.VISIBLE);
                 }
                 @Override
                 public void onSuccess(MobileServiceUser user) {
-                    Toast.makeText(getApplicationContext(), "You are now logged in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Вы авторизованы", Toast.LENGTH_SHORT).show();
                     cacheUserToken(mClient.getCurrentUser());
 
                     ((Button) findViewById(R.id.Log_In)).setVisibility(View.GONE);
@@ -168,7 +167,6 @@ public class ToDoActivity extends Activity {
 
         if (requestCode == GET_USER_INFO_REQUEST_CODE && resultCode == RESULT_OK)
         {
-            mUser.setmEdInstId(data.getStringExtra(FillUserInfo.ED_INST_ITEM_ID));
             mUser.setmFacultyId(data.getStringExtra(FillUserInfo.FACULTY_ITEM_ID));
 
             registerNewUser(mUser);
@@ -239,11 +237,11 @@ public class ToDoActivity extends Activity {
         mUser.setmId(prefs.getString(USERIDPREF, "undefined"));
         if (mUser.getmId() == "undefined")
             return false;
-
+        /*
         mUser.setmEdInstId(prefs.getString(USEREDINST, "undefined"));
         if (mUser.getmEdInstId() == "undefined")
             return false;
-
+        */
         mUser.setmFacultyId(prefs.getString(USERFACULTY, "undefined"));
         if (mUser.getmFacultyId() == "undefined")
             return false;
@@ -255,7 +253,7 @@ public class ToDoActivity extends Activity {
     {
         SharedPreferences prefs = getSharedPreferences(SHAREDPREFFILE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
-        editor.putString(USEREDINST, mUser.getmEdInstId());
+        //editor.putString(USEREDINST, mUser.getmEdInstId());
         editor.putString(USERFACULTY, mUser.getmFacultyId());
         editor.commit();
     }
