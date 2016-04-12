@@ -6,17 +6,22 @@
     <string name="mobile_services">Mobile Services </string>
     <string name="menu_refresh">Refresh</string>
     <string name="checkbox_text">Item Text</string>
-    <string name="schedule_title">Schedule</string>
-    <string name="fill_user_info_title">Fill your info</string>
-    <string name="edInstTV_title">Enter the name of the institution</string>
+    <string name="schedule_title">Расписание</string>
+    <string name="fill_user_info_title">Информация о пользователе</string>
+    <string name="edInstTV_title">Введите название учебного заведения</string>
     <string name="EdInst_table_name">EdInst</string>
     <string name="Faculties_table_name">Faculties</string>
     <string name="Users_table_name">users</string>
-    <string name="faqultyTV_title">Enter the name of faculty</string>
-    <string name="submin_title">Submit</string>
+    <string name="faqultyTV_title">Введите название факультета</string>
+    <string name="submin_title">Подтреврдить</string>
     <string name="scheduleItems_table_name">scheduleItems</string>
     <string name="timeItems_table_name">timeItems</string>
     <string name="scheduleTaskItems_table_name">scheduletasks</string>
+    <string name="newSchItemActivity_title">Новое занятие</string>
+    <string name="editSchItemActivity_title">Редактировие занятия</string>
+    <string name="newTimeItemActivity_title">Новый элемент времени</string>
+    <string name="newSchTaskActivity_title">Новая задача</string>
+    <string name="ScheduleTasksActivity_title">Задачи</string>
 
     <string-array name="days">
         <item>Понедельник</item>

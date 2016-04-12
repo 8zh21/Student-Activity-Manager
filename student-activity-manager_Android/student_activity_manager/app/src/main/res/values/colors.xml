@@ -2,4 +2,5 @@
 <resources>
     <color name="softred">#FF7777</color>
     <color name="softgreen">#77FF77</color>
+    <color name="maincolor">#2AACD8</color>
 </resources>

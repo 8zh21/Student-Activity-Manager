@@ -86,7 +86,7 @@ public class FillUserInfo extends Activity {
                     });
 
                 } catch (Exception e) {
-                    createAndShowDialogFromTask(e.getMessage(), "Error");
+                    createAndShowDialogFromTask(e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -115,7 +115,7 @@ public class FillUserInfo extends Activity {
                     }
 
                 } catch (final Exception e) {
-                    createAndShowDialogFromTask(e.getMessage(), "Error");
+                    createAndShowDialogFromTask(e.getMessage(), "Ошибка");
                 }
 
             return null;
@@ -165,7 +165,7 @@ public class FillUserInfo extends Activity {
                     });
 
                 } catch (Exception e) {
-                    createAndShowDialogFromTask(e.getMessage(), "Error");
+                    createAndShowDialogFromTask(e.getMessage(), "Ошибка");
                 }
                 return null;
             }

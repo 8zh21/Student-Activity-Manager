@@ -7,9 +7,6 @@ public class ScheduleTaskItem {
     @com.google.gson.annotations.SerializedName("id")
     private String id;
 
-    @com.google.gson.annotations.SerializedName("userId")
-    private  String userId;
-
     @com.google.gson.annotations.SerializedName("schItemId")
     private  String schItemId;
 
@@ -19,11 +16,10 @@ public class ScheduleTaskItem {
     @com.google.gson.annotations.SerializedName("isCompleted")
     private  boolean isCompleted;
 
-    public ScheduleTaskItem(String text, String userId, String schItemId) {
+    public ScheduleTaskItem(String text, String schItemId) {
         this.isCompleted = false;
         this.schItemId = schItemId;
         this.text = text;
-        this.userId = userId;
     }
 
     public String getId() {
@@ -42,10 +38,6 @@ public class ScheduleTaskItem {
         return text;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -60,9 +52,5 @@ public class ScheduleTaskItem {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }

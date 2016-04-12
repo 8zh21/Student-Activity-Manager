@@ -10,14 +10,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name:"
+            android:text="Имя:"
             android:id="@+id/textView4" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/timeItemName"
-            android:hint="time model name"
             android:singleLine="true" />
 
     <LinearLayout
@@ -36,7 +35,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start time:"
+                    android:text="Время начала:"
                     android:id="@+id/textView5" />
 
             <TimePicker
@@ -55,7 +54,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Finish time:"
+                    android:text="Время конца:"
                     android:id="@+id/textView6" />
 
             <TimePicker
@@ -70,7 +69,7 @@
     <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
+            android:text="Добавить"
             android:id="@+id/submitNewTimeItemButton"
             android:onClick="saveNewTimeItem"/>
 

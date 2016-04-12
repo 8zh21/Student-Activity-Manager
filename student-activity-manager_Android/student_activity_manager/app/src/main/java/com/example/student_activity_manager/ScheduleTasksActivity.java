@@ -113,7 +113,7 @@ public class ScheduleTasksActivity extends Activity {
                     });
                 } catch (Exception e)
                 {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -154,7 +154,7 @@ public class ScheduleTasksActivity extends Activity {
                     });
                 } catch (Exception e)
                 {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }

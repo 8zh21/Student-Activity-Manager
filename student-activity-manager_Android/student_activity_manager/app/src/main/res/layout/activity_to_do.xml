@@ -4,26 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="1"
     >
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
-        android:layout_width="28dp"
-        android:layout_height="28dp" />
+        android:layout_gravity="center_horizontal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="5dip"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.65"
+        android:id="@+id/mainImageView"
+        android:src="@drawable/main_logo"
+        android:padding="20dp" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:text="Log In"
+        android:text="Войти"
         android:id="@+id/Log_In"
-        android:onClick="logIn">
+        android:onClick="logIn" >
     </Button>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Schedule"
+        android:text="Расписание"
         android:id="@+id/GoToSchedule"
         android:onClick="goToSchedule">
     </Button>

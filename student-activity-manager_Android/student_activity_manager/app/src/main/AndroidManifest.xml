@@ -11,9 +11,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +25,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,11 +34,21 @@
         <activity
             android:name=".FillUserInfo"
             android:label="@string/fill_user_info_title" />
-        <activity android:name=".newSchItemActivity" />
-        <activity android:name=".editSchItemActivity" />
-        <activity android:name=".newTimeItemActivity" />
-        <activity android:name=".newSchTaskActivity" />
-        <activity android:name=".ScheduleTasksActivity"></activity>
+        <activity
+            android:name=".newSchItemActivity"
+            android:label="@string/newSchItemActivity_title"/>
+        <activity
+            android:name=".editSchItemActivity"
+            android:label="@string/editSchItemActivity_title"/>
+        <activity
+            android:name=".newTimeItemActivity"
+            android:label="@string/newTimeItemActivity_title"/>
+        <activity
+            android:name=".newSchTaskActivity"
+            android:label="@string/newSchTaskActivity_title"/>
+        <activity
+            android:name=".ScheduleTasksActivity"
+            android:label="@string/ScheduleTasksActivity_title" />
     </application>
 
 </manifest>

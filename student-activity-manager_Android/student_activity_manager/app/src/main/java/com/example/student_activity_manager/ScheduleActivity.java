@@ -67,7 +67,7 @@ public class ScheduleActivity extends Activity {
             prepareListView();
 
         } catch (Exception e) {
-            Dialog.createAndShowDialog(this, e.getMessage(), "Error");
+            Dialog.createAndShowDialog(this, e.getMessage(), "Ошибка");
         }
     }
 
@@ -89,7 +89,7 @@ public class ScheduleActivity extends Activity {
                 try {
                     refreshing.get();
                 } catch (Exception e) {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -118,7 +118,7 @@ public class ScheduleActivity extends Activity {
                                 TimeItem timeItem = getTimeItemFromId(item.getTimeItemId());
                                 String time = timeItem.getStartTime() + "-" + timeItem.getFinishTime();
                                 String message = item.getTitle() +
-                                        "\n\n" + "At classroom: " + item.getClassroom();
+                                        "\n\n" + "В аудитории: " + item.getClassroom();
 
                                 Dialog.createAndShowDialog(mThis, message, time);
                             }
@@ -175,7 +175,7 @@ public class ScheduleActivity extends Activity {
                     if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
                         finish();
                         ToDoActivity.mThis.authenticate(true);
-                    } else if (!isCancelled()) {
+                    } else if (!isNetworkConnected() && !isCancelled()) {
                         Dialog.createAndShowDialogFromTask(mThis, "Не получилось соединиться с сервером.\nРаботаем оффлайн.", "Нет соединения");
                                             }
                     else
@@ -201,7 +201,7 @@ public class ScheduleActivity extends Activity {
                     refreshFromMobileServiceTableSyncTable();
 
                 } catch (Exception e) {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -260,7 +260,6 @@ public class ScheduleActivity extends Activity {
 
                     tableDefinition = new HashMap<String, ColumnDataType>();
                     tableDefinition.put("id", ColumnDataType.String);
-                    tableDefinition.put("userId", ColumnDataType.String);
                     tableDefinition.put("schItemId", ColumnDataType.String);
                     tableDefinition.put("text", ColumnDataType.String);
                     tableDefinition.put("isCompleted", ColumnDataType.Boolean);
@@ -274,7 +273,7 @@ public class ScheduleActivity extends Activity {
                     syncContext.initialize(localStore, handler).get();
 
                 } catch (final Exception e) {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
 
                 return null;
@@ -342,7 +341,7 @@ public class ScheduleActivity extends Activity {
                     });
                 } catch (Exception e)
                 {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -369,7 +368,7 @@ public class ScheduleActivity extends Activity {
                     }
                 } catch (Exception e)
                 {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }
@@ -391,7 +390,7 @@ public class ScheduleActivity extends Activity {
                 try {
                     refreshing.get();
                 } catch (Exception e) {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 runOnUiThread(new Runnable() {
                     @Override

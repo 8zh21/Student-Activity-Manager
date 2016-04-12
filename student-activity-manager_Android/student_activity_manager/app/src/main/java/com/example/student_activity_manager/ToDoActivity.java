@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ public class ToDoActivity extends Activity {
         // We first try to load a token cache if one exists.
         if (!isForcibly && loadUserTokenCache(mClient))
         {
-            Toast.makeText(getApplicationContext(), "You are now logged in offline", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Токен авторизации загружен", Toast.LENGTH_SHORT).show();
             checkUser();
         }
         // If we failed to load a token cache, login and create a token cache
@@ -98,7 +99,7 @@ public class ToDoActivity extends Activity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), "User confirmed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Пользователь подтвержден", Toast.LENGTH_SHORT).show();
                                     ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
                                 }
                             });
@@ -109,13 +110,18 @@ public class ToDoActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "User confirmed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Пользователь подтвержден", Toast.LENGTH_SHORT).show();
                                 ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
                             }
                         });
                     }
                 } catch (final Exception e){
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
+                        authenticate(true);
+                    }
+                    else {
+                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
+                    }
                 }
                 return null;
             }
@@ -150,7 +156,7 @@ public class ToDoActivity extends Activity {
         } catch (MalformedURLException e) {
             Dialog.createAndShowDialog(this, "There was an error creating the Mobile Service. Verify the URL", "Error");
         } catch (Exception e){
-            Dialog.createAndShowDialog(this, e.getMessage(), "Error");
+            Dialog.createAndShowDialog(this, e.getMessage(), "Ошибка");
         }
     }
 
@@ -186,7 +192,7 @@ public class ToDoActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "You are registered", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Вы зарегестрированы", Toast.LENGTH_SHORT).show();
 
                             cacheUserInfo();
                             ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
@@ -194,7 +200,7 @@ public class ToDoActivity extends Activity {
                     });
 
                 } catch (final Exception e){
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
                 return null;
             }

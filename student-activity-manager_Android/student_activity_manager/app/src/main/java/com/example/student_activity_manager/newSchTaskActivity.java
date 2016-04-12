@@ -29,8 +29,7 @@ public class newSchTaskActivity extends Activity {
         }
         else
         {
-            final ScheduleTaskItem sTI = new ScheduleTaskItem(text, ToDoActivity.mUser.getmId(),
-                                                          scheduleItemId);
+            final ScheduleTaskItem sTI = new ScheduleTaskItem(text, scheduleItemId);
 
             AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -47,7 +46,7 @@ public class newSchTaskActivity extends Activity {
                         });
                     } catch (Exception e)
                     {
-                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Error");
+                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                     }
                     return null;
                 }
