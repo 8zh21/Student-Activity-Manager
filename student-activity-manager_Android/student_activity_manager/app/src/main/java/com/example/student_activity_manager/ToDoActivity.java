@@ -243,11 +243,7 @@ public class ToDoActivity extends Activity {
         mUser.setmId(prefs.getString(USERIDPREF, "undefined"));
         if (mUser.getmId() == "undefined")
             return false;
-        /*
-        mUser.setmEdInstId(prefs.getString(USEREDINST, "undefined"));
-        if (mUser.getmEdInstId() == "undefined")
-            return false;
-        */
+
         mUser.setmFacultyId(prefs.getString(USERFACULTY, "undefined"));
         if (mUser.getmFacultyId() == "undefined")
             return false;
@@ -266,5 +262,10 @@ public class ToDoActivity extends Activity {
 
     public void logIn(View view) {
         authenticate(true);
+    }
+
+    public void goToTasks(View view) {
+        Intent intent = new Intent(this, TasksActivity.class);
+        startActivity(intent);
     }
 }

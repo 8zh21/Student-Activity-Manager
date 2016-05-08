@@ -21,7 +21,9 @@
     <string name="editSchItemActivity_title">Редактировие занятия</string>
     <string name="newTimeItemActivity_title">Новый элемент времени</string>
     <string name="newSchTaskActivity_title">Новая задача</string>
-    <string name="ScheduleTasksActivity_title">Задачи</string>
+    <string name="ScheduleTasksActivity_title">Задачи на занятия</string>
+    <string name="TasksActivity_title">Задачи</string>
+    <string name="tasks_table_name">Tasks</string>
 
     <string-array name="days">
         <item>Понедельник</item>

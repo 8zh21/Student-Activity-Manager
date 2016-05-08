@@ -39,4 +39,12 @@
         android:onClick="goToSchedule">
     </Button>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Задачи"
+        android:id="@+id/GoToTasks"
+        android:onClick="goToTasks">
+    </Button>
+
 </LinearLayout>

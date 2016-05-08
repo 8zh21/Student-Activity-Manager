@@ -23,7 +23,8 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/sch_items_listView"
         android:padding="5dip" />
 
@@ -34,6 +35,7 @@
         android:id="@+id/add_sch_item_button"
         android:visibility="invisible"
         android:onClick="createScheduleItem"
+        android:layout_weight="0"
         android:padding="5dip" />
 
     <Button
@@ -43,6 +45,7 @@
         android:id="@+id/show_tasks_button"
         android:visibility="invisible"
         android:onClick="showTasks"
+        android:layout_weight="0"
         android:padding="5dip" />
 
 </LinearLayout>

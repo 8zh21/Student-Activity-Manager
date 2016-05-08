@@ -39,7 +39,7 @@ public class Dialog {
         builder.show();
     }
 
-    public static void createAndShowSchItemMenuDialog(final Activity activity, final String title,
+    public static void createAndShowMenuDialog(final Activity activity, final String title,
                                                       String[] menuItems, DialogInterface.OnClickListener onClickListener)
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);

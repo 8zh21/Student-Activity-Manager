@@ -43,6 +43,7 @@ public class ScheduleActivity extends Activity {
     public static ScheduleItem schItemOnEdition;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +61,31 @@ public class ScheduleActivity extends Activity {
             scheduleTaskTable = mClient.getSyncTable(getString(R.string.scheduleTaskItems_table_name),
                                                      ScheduleTaskItem.class);
 
+            prepareDaySelector();
+
             initLocalStore().get();
             refreshing = refreshSchedule();
 
-            prepareDaySelector();
             prepareListView();
 
+            /*------------
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        preTask.get();
+                        Notifier.createOfUpdateNotifications(mThis,
+                                scheduleItemAdapter.getAllScheduleItems(),
+                                timeItems,
+                                scheduleTaskItems);
+                    } catch (Exception e) {
+                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
+                    }
+                    return null;
+                }
+            };
+            AsyncTaskRuner.runAsyncTask(task);
+            //------------*/
         } catch (Exception e) {
             Dialog.createAndShowDialog(this, e.getMessage(), "Ошибка");
         }
@@ -81,8 +101,8 @@ public class ScheduleActivity extends Activity {
         daySpinner.setSelection(0);
     }
 
-    private void prepareListView()
-    {
+    private AsyncTask<Void, Void, Void> prepareListView() {
+
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -130,7 +150,7 @@ public class ScheduleActivity extends Activity {
 
                                 String[] menuItems = {"Задачи", "Редактировать", "Удалить"};
                                 final ScheduleItem scheduleItem = scheduleItemAdapter.getItem(position);
-                                Dialog.createAndShowSchItemMenuDialog(mThis,
+                                Dialog.createAndShowMenuDialog(mThis,
                                         scheduleItem.getTitle(),
                                         menuItems,
                                         new DialogInterface.OnClickListener() {
@@ -153,53 +173,46 @@ public class ScheduleActivity extends Activity {
                         findViewById(R.id.show_tasks_button).setVisibility(View.VISIBLE);
                     }
                 });
-                return  null;
-            }
-        };
-        AsyncTaskRuner.runAsyncTask(task);
-
-    }
-
-    private AsyncTask<Void, Void, Void> sync() {
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    MobileServiceSyncContext syncContext = mClient.getSyncContext();
-                    syncContext.push().get();
-                    scheduleItemsTable.pull(null).get();
-                    timeItemsTable.pull(null).get();
-                    scheduleTaskTable.pull(null).get();
-
-                } catch (final ExecutionException e) {
-                    if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
-                        finish();
-                        ToDoActivity.mThis.authenticate(true);
-                    } else if (!isNetworkConnected() && !isCancelled()) {
-                        Dialog.createAndShowDialogFromTask(mThis, "Не получилось соединиться с сервером.\nРаботаем оффлайн.", "Нет соединения");
-                                            }
-                    else
-                    {
-                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
-                    }
-                } catch (Exception e)
-                {
-                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
-                }
                 return null;
             }
         };
-        return  AsyncTaskRuner.runAsyncTask(task);
+        return AsyncTaskRuner.runAsyncTask(task);
     }
 
-    private AsyncTask<Void, Void, Void> refreshSchedule()
-    {
+    private void sync() {
+        if (!isNetworkConnected()) {
+            Dialog.createAndShowDialogFromTask(mThis, "Работаем оффлайн.", "Отсутствует подключение");
+        }
+        else {
+            try {
+                MobileServiceSyncContext syncContext = mClient.getSyncContext();
+                syncContext.push().get();
+                scheduleItemsTable.pull(null).get();
+                timeItemsTable.pull(null).get();
+                scheduleTaskTable.pull(null).get();
+
+            } catch (final ExecutionException e) {
+                if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
+                    finish();
+                    ToDoActivity.mThis.authenticate(true);
+                } else {
+                    Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
+                }
+            } catch (Exception e) {
+                Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
+            }
+        }
+    }
+
+    private AsyncTask<Void, Void, Void> refreshSchedule() {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    refreshFromMobileServiceTableSyncTable();
-
+                    sync();
+                    scheduleItems = scheduleItemsTable.read(null).get();
+                    timeItems = timeItemsTable.read(null).get();
+                    scheduleTaskItems = scheduleTaskTable.read(null).get();
                 } catch (Exception e) {
                     Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
@@ -207,14 +220,6 @@ public class ScheduleActivity extends Activity {
             }
         };
         return AsyncTaskRuner.runAsyncTask(task);
-    }
-
-    private void refreshFromMobileServiceTableSyncTable() throws ExecutionException, InterruptedException
-    {
-        sync().get();
-        scheduleItems = scheduleItemsTable.read(null).get();
-        timeItems = timeItemsTable.read(null).get();
-        scheduleTaskItems = scheduleTaskTable.read(null).get();
     }
 
     private AsyncTask<Void, Void, Void> initLocalStore() throws MobileServiceLocalStoreException, ExecutionException, InterruptedException {
