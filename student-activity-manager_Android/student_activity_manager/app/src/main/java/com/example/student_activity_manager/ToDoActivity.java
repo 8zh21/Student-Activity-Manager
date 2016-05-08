@@ -101,6 +101,7 @@ public class ToDoActivity extends Activity {
                                 public void run() {
                                     Toast.makeText(getApplicationContext(), "Пользователь подтвержден", Toast.LENGTH_SHORT).show();
                                     ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
+                                    ((Button) findViewById(R.id.GoToTasks)).setEnabled(true);
                                 }
                             });
                         }
@@ -112,6 +113,7 @@ public class ToDoActivity extends Activity {
                             public void run() {
                                 Toast.makeText(getApplicationContext(), "Пользователь подтвержден", Toast.LENGTH_SHORT).show();
                                 ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
+                                ((Button) findViewById(R.id.GoToTasks)).setEnabled(true);
                             }
                         });
                     }
@@ -140,13 +142,11 @@ public class ToDoActivity extends Activity {
         mUser = new UserItem();
         mProgressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
 
-        // Initialize the progress bar
         mProgressBar.setVisibility(ProgressBar.GONE);
         ((Button) findViewById(R.id.GoToSchedule)).setEnabled(false);
+        ((Button) findViewById(R.id.GoToTasks)).setEnabled(false);
 
         try {
-            // Create the Mobile Service Client instance, using the provided
-            // Mobile Service URL and key
             mClient = new MobileServiceClient(
                     "https://student-activity-manager.azurewebsites.net",
                     this).withFilter(new ProgressFilter(this, mProgressBar));

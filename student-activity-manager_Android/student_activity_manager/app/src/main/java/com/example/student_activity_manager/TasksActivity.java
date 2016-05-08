@@ -96,7 +96,7 @@ public class TasksActivity extends Activity {
                             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                                 final TaskItemWrap item = taskItemAdapter.getItem(position);
-                                String[] menuItems = {"Подробнее", "Выполнено", "Добавить подзадачу", "Удалить"};
+                                String[] menuItems = {"Подробнее", "Выполнено", "Добавить напоминание", "Добавить подзадачу", "Удалить"};
 
                                 Dialog.createAndShowMenuDialog(mThis,
                                         item.item.getName(),
@@ -109,8 +109,10 @@ public class TasksActivity extends Activity {
                                                 else if (which == 1)
                                                     setCompleted(item);
                                                 else if (which == 2)
-                                                    addTaskToParent(item.item.getId());
+                                                    createNotification(item.item.getId(), item.item.getName());
                                                 else if (which == 3)
+                                                    addTaskToParent(item.item.getId());
+                                                else if (which == 4)
                                                     tryToDelTaskItem(item);
                                             }
                                         });
@@ -411,5 +413,13 @@ public class TasksActivity extends Activity {
             };
             AsyncTaskRuner.runAsyncTask(task);
         }
+    }
+
+    private void createNotification(String id, String text)
+    {
+        Intent intent = new Intent(this, newNotificationActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("text", "Задача \"" + text + "\" ожидает выполнения");
+        startActivity(intent);
     }
 }

@@ -68,24 +68,6 @@ public class ScheduleActivity extends Activity {
 
             prepareListView();
 
-            /*------------
-            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        preTask.get();
-                        Notifier.createOfUpdateNotifications(mThis,
-                                scheduleItemAdapter.getAllScheduleItems(),
-                                timeItems,
-                                scheduleTaskItems);
-                    } catch (Exception e) {
-                        Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
-                    }
-                    return null;
-                }
-            };
-            AsyncTaskRuner.runAsyncTask(task);
-            //------------*/
         } catch (Exception e) {
             Dialog.createAndShowDialog(this, e.getMessage(), "Ошибка");
         }

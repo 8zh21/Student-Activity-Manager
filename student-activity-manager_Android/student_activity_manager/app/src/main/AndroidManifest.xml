@@ -53,7 +53,14 @@
         <activity
             android:name=".TasksActivity"
             android:label="@string/TasksActivity_title" />
-        <activity android:name=".newTaskActivity"></activity>
+        <activity android:name=".newTaskActivity" />
+
+        <receiver
+            android:name=".NotificationCreator"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".newNotificationActivity"></activity>
     </application>
 
 </manifest>
