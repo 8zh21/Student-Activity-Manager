@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,7 +16,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceAuthenticationProvider;
 import com.microsoft.windowsazure.mobileservices.authentication.MobileServiceUser;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -196,6 +194,7 @@ public class ToDoActivity extends Activity {
 
                             cacheUserInfo();
                             ((Button) findViewById(R.id.GoToSchedule)).setEnabled(true);
+                            ((Button) findViewById(R.id.GoToTasks)).setEnabled(true);
                         }
                     });
 
