@@ -26,6 +26,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Created by Alexander on 08.05.2016.
+ * Модуль демонстрации задач,
+ * демонстрирует экран задач,
+ * инициализирует таблицы синхронизации и локальное хранилище,
+ * загружает с сервера/локального хранилища данные задач,
+ * синхранизирует данные с сервером,
+ * запускает экраны создания задач,
+ * запускает создание и удаление задач,
+ * строит дерево задач,
+ * строит список задач для адаптера данных
+ */
+
 public class TasksActivity extends Activity {
 
     private MobileServiceClient mClient;

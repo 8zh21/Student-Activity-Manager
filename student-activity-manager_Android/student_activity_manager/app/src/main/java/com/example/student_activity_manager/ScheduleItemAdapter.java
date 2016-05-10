@@ -19,6 +19,9 @@ import java.util.List;
 
 /**
  * Created by Alexander on 21.03.2016.
+ * Адаптер данных (элементов расписания),
+ * конструирует представление элементов расписания,
+ * фильтует и сортирует элементы
  */
 public class ScheduleItemAdapter extends ArrayAdapter<ScheduleItem> {
 

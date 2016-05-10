@@ -27,6 +27,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Created by Alexander on 20.03.2016.
+ * Модуль демонстрации расписания,
+ * демонстрирует экран расписания,
+ * инициализирует таблицы синхронизации и локальное хранилище,
+ * загружает с сервера/локального хранилища данные расписания, элементов времени и задачи,
+ * синхранизирует данные с сервером,
+ * запускает экраны задач,
+ * запускает создание, удаление и редактирование элементов расписания
+ */
+
 public class ScheduleActivity extends Activity {
 
     public static MobileServiceSyncTable<ScheduleItem> scheduleItemsTable;

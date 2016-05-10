@@ -17,6 +17,15 @@ import android.widget.RadioButton;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Alexander on 29.03.2016.
+ * Модуль демонстрации задач для элементов расписания,
+ * демонстрирует экран задач,
+ * запускает создание новой задачи,
+ * помечает задачу как выполненную,
+ * удаляет задачи
+ */
+
 public class ScheduleTasksActivity extends Activity {
 
     private Activity mThis = this;

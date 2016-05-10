@@ -19,6 +19,8 @@ import java.util.List;
 
 /**
  * Created by Alexander on 07.05.2016.
+ * Адаптер данных (задач),
+ * конструирует представление для задачи
  */
 public class TaskItemAdapter extends ArrayAdapter<TaskItemWrap> {
     private Context mContext;

@@ -2,6 +2,7 @@ package com.example.student_activity_manager;
 
 /**
  * Created by Alexander on 15.03.2016.
+ * Класс элемента таблицы который соответствует таблице учебных заведений
  */
 public class EdInstItem {
     @com.google.gson.annotations.SerializedName("id")

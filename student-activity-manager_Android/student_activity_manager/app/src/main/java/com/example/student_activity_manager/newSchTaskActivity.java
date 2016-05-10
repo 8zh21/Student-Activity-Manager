@@ -7,6 +7,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * Created by Alexander on 20.03.2016.
+ * Модуль создания новой задачи для элемента расписания,
+ * демонстрирует экран создания новой задачи,
+ * запускает создание новой задачи
+ */
+
 public class newSchTaskActivity extends Activity {
 
     private String scheduleItemId;

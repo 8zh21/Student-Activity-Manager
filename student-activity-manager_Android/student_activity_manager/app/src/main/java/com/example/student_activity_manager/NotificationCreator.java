@@ -7,6 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Created by Alexander on 08.05.2016.
+ * Модуль демонстрации уведомлений,
+ * получает сигнал от системы,
+ * создает и демонстрирует уведомление в прогрессбаре
+ */
+
 public class NotificationCreator extends BroadcastReceiver {
     public NotificationCreator() {
     }

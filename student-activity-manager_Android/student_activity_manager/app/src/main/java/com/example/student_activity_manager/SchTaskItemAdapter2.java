@@ -15,6 +15,9 @@ import java.util.List;
 
 /**
  * Created by Alexander on 29.03.2016.
+ * Адаптер данных (задач для элементов расписания, всех эл-ов)
+ * конструирует представление для эл-та задачи,
+ * сортирует задачи
  */
 public class SchTaskItemAdapter2 extends SchTaskItemAdapter1 {
     public SchTaskItemAdapter2 (Context context, int layoutResourceId, List<ScheduleTaskItem> objs) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Alexander on 01.05.2016.
+ * Класс обертка для элемента задачи,
+ * представляет задачу как поддерево задач
  */
 public class TaskItemWrap {
     public TaskItem item;

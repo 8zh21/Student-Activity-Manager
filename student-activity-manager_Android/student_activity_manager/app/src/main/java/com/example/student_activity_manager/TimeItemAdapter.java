@@ -19,6 +19,9 @@ import java.util.List;
 
 /**
  * Created by Alexander on 21.03.2016.
+ * Адаптер данных (элементов времени),
+ * конструирует представление элементов времени,
+ * сортирует элементы
  */
 public class TimeItemAdapter extends ArrayAdapter<TimeItem> implements SpinnerAdapter{
 

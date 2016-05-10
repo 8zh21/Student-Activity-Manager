@@ -15,6 +15,7 @@ import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 
 /**
  * Created by Alexander on 15.03.2016.
+ * Демонстрирует прогрессбар в процессе выполнения операции
  */
 public class ProgressFilter implements ServiceFilter {
 

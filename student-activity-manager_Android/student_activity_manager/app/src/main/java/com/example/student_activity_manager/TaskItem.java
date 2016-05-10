@@ -2,6 +2,7 @@ package com.example.student_activity_manager;
 
 /**
  * Created by Alexander on 26.04.2016.
+ * Класс элемента таблицы который соответствует таблице задач
  */
 public class TaskItem {
     @com.google.gson.annotations.SerializedName("id")

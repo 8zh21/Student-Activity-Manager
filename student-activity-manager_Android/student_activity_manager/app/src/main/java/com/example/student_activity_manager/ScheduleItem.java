@@ -2,6 +2,7 @@ package com.example.student_activity_manager;
 
 /**
  * Created by Alexander on 18.03.2016.
+ * Класс элемента таблицы который соответствует таблице элементов расписания
  */
 public class ScheduleItem {
     @com.google.gson.annotations.SerializedName("id")

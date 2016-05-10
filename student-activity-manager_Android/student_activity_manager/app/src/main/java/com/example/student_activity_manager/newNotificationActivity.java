@@ -11,6 +11,13 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+/**
+ * Created by Alexander on 08.05.2016.
+ * Модуль создания уведомления о долгосрочной задаче,
+ * демонстрирует экран создания уведомления,
+ * создает уведомление и регистрирует в системе
+ */
+
 public class newNotificationActivity extends Activity {
 
     private TimePicker timePicker;

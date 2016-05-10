@@ -24,6 +24,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+/**
+ * Created by Alexander on 15.03.2016.
+ * Главный модуль приложения,
+ * демонстрирует главный экран, запускает экраны регистрации, расписания и долговременных задач,
+ * инициализирует объект мобильного клиента,
+ * запускает авторизацию,
+ * кэширует и загружает токен авторизации и регистрационные данные,
+ */
 
 public class ToDoActivity extends Activity {
 

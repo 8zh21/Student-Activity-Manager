@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 /**
  * Created by Alexander on 23.03.2016.
+ * Модуль редактирования элемента расписания, демонстрирует экран редактирования и
+ * сохраняет изменения
  */
 public class editSchItemActivity extends newSchItemActivity {
 
