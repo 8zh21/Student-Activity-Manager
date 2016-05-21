@@ -1,3 +1,10 @@
+/**
+ * Created by Alexander Podshiblov on 29.03.2016.
+ * Адаптер данных (задач для элементов расписания, конкретного эл-та)
+ * конструирует представление для эл-та задачи,
+ * фильтрует и сортирует задачи
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -15,12 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Alexander on 29.03.2016.
- * Адаптер данных (задач для элементов расписания, конкретного эл-та)
- * конструирует представление для эл-та задачи,
- * фильтрует и сортирует задачи
- */
 public class SchTaskItemAdapter1 extends ArrayAdapter<ScheduleTaskItem> {
 
     protected Context mContext;

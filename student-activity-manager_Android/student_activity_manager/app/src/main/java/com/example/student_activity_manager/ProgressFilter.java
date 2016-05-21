@@ -1,3 +1,8 @@
+/**
+ * Created by Alexander Podshiblov on 15.03.2016.
+ * Демонстрирует прогрессбар в процессе выполнения операции
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -13,10 +18,6 @@ import com.microsoft.windowsazure.mobileservices.http.ServiceFilter;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 
-/**
- * Created by Alexander on 15.03.2016.
- * Демонстрирует прогрессбар в процессе выполнения операции
- */
 public class ProgressFilter implements ServiceFilter {
 
     private ProgressBar pB;

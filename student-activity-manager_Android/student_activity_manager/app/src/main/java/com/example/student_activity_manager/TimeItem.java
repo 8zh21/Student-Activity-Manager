@@ -1,9 +1,9 @@
-package com.example.student_activity_manager;
-
 /**
- * Created by Alexander on 20.03.2016.
+ * Created by Alexander Podshiblov on 20.03.2016.
  * Класс элемента таблицы который соответствует таблице элементов времени
  */
+
+package com.example.student_activity_manager;
 
 public class TimeItem {
     @com.google.gson.annotations.SerializedName("id")

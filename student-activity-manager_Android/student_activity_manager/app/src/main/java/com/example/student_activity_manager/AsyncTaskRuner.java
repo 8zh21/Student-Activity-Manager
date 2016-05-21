@@ -1,12 +1,13 @@
+/**
+ * Created by Alexander Podshiblov on 20.03.2016.
+ * Класс со статическим методом запуска асинхронной задачи
+ */
+
 package com.example.student_activity_manager;
 
 import android.os.AsyncTask;
 import android.os.Build;
 
-/**
- * Created by Alexander on 20.03.2016.
- * Класс со статическим методом запуска асинхронной задачи
- */
 public class AsyncTaskRuner {
     public static AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
         /*

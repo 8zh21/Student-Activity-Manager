@@ -1,3 +1,16 @@
+/**
+ * Created by Alexander Podshiblov on 08.05.2016.
+ * Модуль демонстрации задач,
+ * демонстрирует экран задач,
+ * инициализирует таблицы синхронизации и локальное хранилище,
+ * загружает с сервера/локального хранилища данные задач,
+ * синхранизирует данные с сервером,
+ * запускает экраны создания задач,
+ * запускает создание и удаление задач,
+ * строит дерево задач,
+ * строит список задач для адаптера данных
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -11,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
@@ -25,19 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-/**
- * Created by Alexander on 08.05.2016.
- * Модуль демонстрации задач,
- * демонстрирует экран задач,
- * инициализирует таблицы синхронизации и локальное хранилище,
- * загружает с сервера/локального хранилища данные задач,
- * синхранизирует данные с сервером,
- * запускает экраны создания задач,
- * запускает создание и удаление задач,
- * строит дерево задач,
- * строит список задач для адаптера данных
- */
 
 public class TasksActivity extends Activity {
 
@@ -196,7 +197,19 @@ public class TasksActivity extends Activity {
                 if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
                     finish();
                     ToDoActivity.mThis.authenticate(true);
-                } else {
+                }
+                else if (e.getCause().getCause().getMessage() != null &&
+                        e.getCause().getCause().getMessage().equals("timeout"))
+                {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Таймаут соединения\nПопытка №2", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    sync();
+                }
+                else {
                     Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");
                 }
             } catch (Exception e) {

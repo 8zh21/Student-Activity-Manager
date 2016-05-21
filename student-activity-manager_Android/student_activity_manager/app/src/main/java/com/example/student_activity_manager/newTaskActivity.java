@@ -1,3 +1,10 @@
+/**
+ * Created by Alexander Podshiblov on 08.05.2016.
+ * Модуль создания новой долговременной задачи,
+ * демонстрирует экран создания новой задачи,
+ * сохраняет задачу
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -8,13 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
-/**
- * Created by Alexander on 08.05.2016.
- * Модуль создания новой долговременной задачи,
- * демонстрирует экран создания новой задачи,
- * сохраняет задачу
- */
 
 public class newTaskActivity extends Activity {
 

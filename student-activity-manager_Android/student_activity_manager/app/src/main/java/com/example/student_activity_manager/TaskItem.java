@@ -1,9 +1,10 @@
-package com.example.student_activity_manager;
-
 /**
- * Created by Alexander on 26.04.2016.
+ * Created by Alexander Podshiblov on 26.04.2016.
  * Класс элемента таблицы который соответствует таблице задач
  */
+
+package com.example.student_activity_manager;
+
 public class TaskItem {
     @com.google.gson.annotations.SerializedName("id")
     private String id;

@@ -1,9 +1,10 @@
-package com.example.student_activity_manager;
-
 /**
- * Created by Alexander on 18.03.2016.
+ * Created by Alexander Podshiblov on 18.03.2016.
  * Класс элемента таблицы который соответствует таблице элементов расписания
  */
+
+package com.example.student_activity_manager;
+
 public class ScheduleItem {
     @com.google.gson.annotations.SerializedName("id")
     private String id;

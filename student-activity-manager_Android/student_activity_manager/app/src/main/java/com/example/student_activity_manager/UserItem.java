@@ -1,8 +1,9 @@
+/**
+ * Created by Alexander Podshiblov on 15.03.2016.
+ */
+
 package com.example.student_activity_manager;
 
-/**
- * Created by Alexander on 15.03.2016.
- */
 public class UserItem
 {
     @com.google.gson.annotations.SerializedName("id")

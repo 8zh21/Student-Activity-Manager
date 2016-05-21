@@ -1,3 +1,10 @@
+/**
+ * Created by Alexander Podshiblov on 20.03.2016.
+ * Модуль создания нового элемента времени,
+ * демонстрирует экран создания элемента,
+ * сохраняет элемент времени
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -7,13 +14,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-/**
- * Created by Alexander on 20.03.2016.
- * Модуль создания нового элемента времени,
- * демонстрирует экран создания элемента,
- * сохраняет элемент времени
- */
 
 public class newTimeItemActivity extends Activity {
 

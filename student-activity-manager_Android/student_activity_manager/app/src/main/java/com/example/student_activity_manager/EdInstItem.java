@@ -1,9 +1,10 @@
-package com.example.student_activity_manager;
-
 /**
- * Created by Alexander on 15.03.2016.
+ * Created by Alexander Podshiblov on 15.03.2016.
  * Класс элемента таблицы который соответствует таблице учебных заведений
  */
+
+package com.example.student_activity_manager;
+
 public class EdInstItem {
     @com.google.gson.annotations.SerializedName("id")
     private String mId;

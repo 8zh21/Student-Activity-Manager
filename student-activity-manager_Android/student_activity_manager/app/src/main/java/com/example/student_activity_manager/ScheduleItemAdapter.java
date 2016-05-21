@@ -1,3 +1,10 @@
+/**
+ * Created by Alexander Podshiblov on 21.03.2016.
+ * Адаптер данных (элементов расписания),
+ * конструирует представление элементов расписания,
+ * фильтует и сортирует элементы
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -17,12 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Alexander on 21.03.2016.
- * Адаптер данных (элементов расписания),
- * конструирует представление элементов расписания,
- * фильтует и сортирует элементы
- */
 public class ScheduleItemAdapter extends ArrayAdapter<ScheduleItem> {
 
     private Context mContext;

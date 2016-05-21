@@ -1,3 +1,12 @@
+/**
+ * Created by Alexander Podshiblov on 20.03.2016.
+ * Модуль создания нового элемента расписания,
+ * демонстрирует экран создания нового элемента расписания,
+ * заускает создание нового элемента времени,
+ * удаляет элемент времени,
+ * сохраняет новый элемент расписания
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -10,15 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-/**
- * Created by Alexander on 20.03.2016.
- * Модуль создания нового элемента расписания,
- * демонстрирует экран создания нового элемента расписания,
- * заускает создание нового элемента времени,
- * удаляет элемент времени,
- * сохраняет новый элемент расписания
- */
 
 public class newSchItemActivity extends Activity {
 

@@ -1,13 +1,14 @@
+/**
+ * Created by Alexander Podshiblov on 20.03.2016.
+ * Ксласс со статическими методами показа различных диалоговых окон
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-/**
- * Created by Alexander on 20.03.2016.
- * Ксласс со статическими методами показа различных диалоговых окон
- */
 public class Dialog {
     // Создает и демонстрирует диалоговое мнформационное окно
     public static void createAndShowDialog(final Activity activity, final String message, final String title) {

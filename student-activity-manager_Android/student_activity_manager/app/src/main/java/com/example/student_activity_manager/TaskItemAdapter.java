@@ -1,3 +1,9 @@
+/**
+ * Created by Alexander Podshiblov on 07.05.2016.
+ * Адаптер данных (задач),
+ * конструирует представление для задачи
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -17,11 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Alexander on 07.05.2016.
- * Адаптер данных (задач),
- * конструирует представление для задачи
- */
 public class TaskItemAdapter extends ArrayAdapter<TaskItemWrap> {
     private Context mContext;
     private int mLayoutResourceId;

@@ -1,5 +1,13 @@
-package com.example.student_activity_manager;
+/**
+ * Created by Alexander Podshiblov on 15.03.2016.
+ * Главный модуль приложения,
+ * демонстрирует главный экран, запускает экраны регистрации, расписания и долговременных задач,
+ * инициализирует объект мобильного клиента,
+ * запускает авторизацию,
+ * кэширует и загружает токен авторизации и регистрационные данные,
+ */
 
+package com.example.student_activity_manager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,15 +31,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
-/**
- * Created by Alexander on 15.03.2016.
- * Главный модуль приложения,
- * демонстрирует главный экран, запускает экраны регистрации, расписания и долговременных задач,
- * инициализирует объект мобильного клиента,
- * запускает авторизацию,
- * кэширует и загружает токен авторизации и регистрационные данные,
- */
 
 public class ToDoActivity extends Activity {
 
@@ -126,6 +125,17 @@ public class ToDoActivity extends Activity {
                 } catch (final Exception e){
                     if (e.getCause().getMessage() != null && e.getCause().getMessage().equals("{'code': 401}")) {
                         authenticate(true);
+                    }
+                    else if (e.getCause().getCause().getMessage() != null &&
+                             e.getCause().getCause().getMessage().equals("timeout"))
+                    {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Таймаут соединения\nПопытка №2", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        checkUser();
                     }
                     else {
                         Dialog.createAndShowDialogFromTask(mThis, e.getMessage(), "Ошибка");

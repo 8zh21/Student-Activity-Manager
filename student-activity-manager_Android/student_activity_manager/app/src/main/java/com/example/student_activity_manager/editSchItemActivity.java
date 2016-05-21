@@ -1,3 +1,9 @@
+/**
+ * Created by Alexander Podshiblov on 23.03.2016.
+ * Модуль редактирования элемента расписания, демонстрирует экран редактирования и
+ * сохраняет изменения
+ */
+
 package com.example.student_activity_manager;
 
 import android.os.AsyncTask;
@@ -7,11 +13,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-/**
- * Created by Alexander on 23.03.2016.
- * Модуль редактирования элемента расписания, демонстрирует экран редактирования и
- * сохраняет изменения
- */
 public class editSchItemActivity extends newSchItemActivity {
 
     private ScheduleItem item;

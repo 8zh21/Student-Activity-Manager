@@ -1,3 +1,10 @@
+/**
+ * Created by Alexander Podshiblov on 21.03.2016.
+ * Адаптер данных (элементов времени),
+ * конструирует представление элементов времени,
+ * сортирует элементы
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -17,12 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Alexander on 21.03.2016.
- * Адаптер данных (элементов времени),
- * конструирует представление элементов времени,
- * сортирует элементы
- */
 public class TimeItemAdapter extends ArrayAdapter<TimeItem> implements SpinnerAdapter{
 
     private Context mContext;

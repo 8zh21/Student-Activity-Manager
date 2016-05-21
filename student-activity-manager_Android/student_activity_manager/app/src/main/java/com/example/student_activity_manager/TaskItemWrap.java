@@ -1,12 +1,13 @@
+/**
+ * Created by Alexander Podshiblov on 01.05.2016.
+ * Класс обертка для элемента задачи,
+ * представляет задачу как поддерево задач
+ */
+
 package com.example.student_activity_manager;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alexander on 01.05.2016.
- * Класс обертка для элемента задачи,
- * представляет задачу как поддерево задач
- */
 public class TaskItemWrap {
     public TaskItem item;
     public boolean isOpen;

@@ -1,3 +1,11 @@
+/**
+ * Created by Alexander Podshiblov on 15.03.2016.
+ * Модуль сбора регистрационных данных,
+ * демострирует эран регистрации,
+ * загружает данные учебных заведений и факультетов,
+ * собирает данные, сохраняет и отправляет на сервер
+ */
+
 package com.example.student_activity_manager;
 
 import android.app.Activity;
@@ -15,15 +23,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 
 import java.io.Serializable;
 import java.util.List;
-
-/**
- * Created by Alexander on 15.03.2016.
- * Модуль сбора регистрационных данных,
- * демострирует эран регистрации,
- * загружает данные учебных заведений и факультетов,
- * собирает данные, сохраняет и отправляет на сервер
- *
- */
 
 public class FillUserInfo extends Activity {
 
